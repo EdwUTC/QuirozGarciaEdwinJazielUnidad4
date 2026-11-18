@@ -1,0 +1,73 @@
+/* =========================================================
+   Transición entre el login y el registro
+   ---------------------------------------------------------
+   Usa la API de View Transitions (Chrome/Edge 126+). Al navegar
+   entre /login y /registro, el bloque de acceso se transforma en
+   lugar de aparecer de golpe.
+
+   En navegadores sin soporte, el bloque entra con una animación
+   suave al cargar: se ve bien en todos lados.
+   ========================================================= */
+
+/* Transición entre documentos de la misma origen. */
+@view-transition {
+    navigation: auto;
+}
+
+/* El bloque de acceso viaja de una página a la otra. */
+.auth-wrap {
+    view-transition-name: auth-card;
+}
+
+/* El menú se mantiene quieto para dar continuidad. */
+.navbar {
+    view-transition-name: barra-navegacion;
+}
+
+/* Salida: el formulario se desvanece y se encoge un poco. */
+::view-transition-old(auth-card) {
+    animation: auth-salida 0.22s ease both;
+}
+
+/* Entrada: aparece desde abajo con un rebote suave. */
+::view-transition-new(auth-card) {
+    animation: auth-entrada 0.42s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@keyframes auth-salida {
+    to {
+        opacity: 0;
+        transform: translateY(-10px) scale(0.985);
+    }
+}
+
+@keyframes auth-entrada {
+    from {
+        opacity: 0;
+        transform: translateY(18px) scale(0.985);
+    }
+}
+
+/* ---------------- Alternativa sin View Transitions ---------------- */
+.auth-wrap {
+    animation: auth-entrada 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@supports (view-transition-name: auth-card) {
+    /* Si hay soporte nativo, la entrada la maneja la transición. */
+    .auth-wrap {
+        animation: none;
+    }
+}
+
+/* ---------------- Menos movimiento ---------------- */
+@media (prefers-reduced-motion: reduce) {
+    .auth-wrap {
+        animation: none;
+    }
+
+    ::view-transition-old(auth-card),
+    ::view-transition-new(auth-card) {
+        animation: none;
+    }
+}
