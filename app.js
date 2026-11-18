@@ -7,11 +7,15 @@ const helmet = require("helmet");
 
 const conexion = require("./database/conexion");
 const { exponerToken, validarToken } = require("./middleware/csrf");
+const { limiteApi } = require("./middleware/rateLimit");
 
 // Importar rutas
 const authRoutes = require("./routes/auth");
 const dashboardRoutes = require("./routes/dashboard");
 const clinicaRoutes = require("./routes/clinica");
+const padresRoutes = require("./routes/padres");
+const mensajesRoutes = require("./routes/mensajes");
+const apiRoutes = require("./routes/api");
 const publicRoutes = require("./routes/public");
 
 const app = express();
@@ -64,6 +68,7 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: "100kb" }));
 
 // Los archivos estáticos se sirven antes de la sesión para no crear
 // una sesión por cada imagen, hoja de estilo o script.
@@ -114,6 +119,12 @@ app.use(validarToken);
 app.use("/", authRoutes);
 app.use("/", dashboardRoutes);
 app.use("/", clinicaRoutes);
+app.use("/", padresRoutes);
+app.use("/", mensajesRoutes);
+
+// API REST propia (JSON). Va antes de las rutas públicas y del 404.
+app.use("/api", limiteApi, apiRoutes);
+
 app.use("/", publicRoutes);
 
 // Manejo de errores 404
@@ -124,6 +135,20 @@ app.use((req, res) => {
 // Manejador de errores no controlados
 app.use((err, req, res, next) => {
     console.error("Error no controlado:", err);
+
+    const esApi = req.path === "/api" || req.path.startsWith("/api/");
+
+    if (esApi) {
+        const codigo = Number(err.status || err.statusCode) || 500;
+
+        return res.status(codigo).json({
+            ok: false,
+            error: codigo === 400
+                ? "El cuerpo de la petición no es un JSON válido"
+                : "Error interno del servidor"
+        });
+    }
+
     res.status(500).render("error", {
         titulo: "Error interno",
         codigo: 500,

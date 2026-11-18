@@ -44,6 +44,14 @@ function validarToken(req, res, next) {
     const tokenSesion = req.session && req.session.csrfToken;
 
     if (!compararSeguro(tokenEnviado, tokenSesion)) {
+        // Las rutas de la API responden en JSON; el resto, con una página.
+        if (req.path === "/api" || req.path.startsWith("/api/")) {
+            return res.status(403).json({
+                ok: false,
+                error: "Token CSRF inválido o sesión expirada"
+            });
+        }
+
         return res.status(403).render("error", {
             titulo: "Solicitud rechazada",
             codigo: 403,

@@ -52,13 +52,22 @@ Cualquier registro nuevo se crea con el rol `paciente`.
 app.js                 Punto de entrada (helmet, sesión, CSRF, rutas)
 database/conexion.js   Pool de PostgreSQL
 middleware/            CSRF y límite de peticiones
-routes/                auth (sesión), dashboard (privado), public (libre)
-services/email.js      Envío del correo de recuperación
-models/                Clases de datos
+routes/                auth, dashboard, clinica, padres, mensajes, api, public
+services/              usuario, citas, emociones, contenido, email
 views/                 Plantillas EJS + partials
 public/                CSS y JavaScript del navegador
 schema.sql             Esquema de la base de datos
-docs/                  Documentación de seguridad
+docs/                  Documentación (seguridad, análisis y API)
+```
+
+## API REST
+
+El proyecto expone una API propia en `/api` (JSON), documentada en
+[`docs/API.md`](docs/API.md). Usa la misma sesión que la web y exige el
+token CSRF en la cabecera `x-csrf-token` para los `POST` y `PATCH`.
+
+```bash
+curl http://localhost:3000/api/estado
 ```
 
 ## Seguridad
@@ -66,9 +75,10 @@ docs/                  Documentación de seguridad
 - Contraseñas con `bcrypt` (coste 10).
 - Consultas parametrizadas (sin inyección SQL).
 - Regeneración de sesión al iniciar sesión (evita *session fixation*).
-- Protección **CSRF** por token en todos los formularios.
-- **Límite de peticiones** en login, registro y recuperación.
+- Protección **CSRF** por token en todos los formularios y en la API.
+- **Límite de peticiones** en login, registro, recuperación y API.
 - Recuperación de contraseña con **token de un solo uso** y caducidad.
 - Cabeceras de seguridad con `helmet` (incluida CSP).
+- Mensajería **privada** entre cada paciente y la licenciada.
 
 El detalle de la auditoría está en [`docs/README-SEGURIDAD.md`](docs/README-SEGURIDAD.md).

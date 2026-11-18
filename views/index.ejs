@@ -13,122 +13,227 @@
 
 <main class="flex-grow-1">
 
-    <div class="container mt-5">
+    <!-- ================= HERO ================= -->
+    <section class="hero-publico">
 
-        <div class="hero-section text-center shadow-sm animate__animated animate__fadeInLeft">
+        <div class="container">
 
-            <%- include('partials/mascota') %>
+            <div class="row align-items-center g-4 g-lg-5">
 
-            <h1 class="display-5">
-                Consultorio Psicológico Infantil
-            </h1>
+                <div class="col-lg-6 text-center text-lg-start">
 
-            <h2 class="text-primary">
-                Un Rayito de Sol
-            </h2>
+                    <span class="etiqueta-seccion">Consultorio psicológico infantil</span>
 
-            <p class="lead mt-3">
-                Brindamos apoyo emocional y psicológico
-                para niñas, niños y sus familias mediante
-                atención profesional y personalizada.
-            </p>
+                    <h1 class="hero-titulo mt-3">
+                        Un lugar donde las niñas y los niños
+                        <span class="texto-destacado">se sienten escuchados</span>
+                    </h1>
 
-            <div class="d-flex flex-wrap justify-content-center gap-2 mt-4">
+                    <p class="hero-texto texto-intro">
+                        Acompañamos a las familias en el bienestar emocional de sus
+                        hijos con terapia infantil, orientación familiar y
+                        evaluaciones, en un espacio seguro y sin juicios.
+                    </p>
 
-                <a href="/rincon" class="btn btn-warning btn-lg fw-bold shadow-sm">
-                    <i class="fa-solid fa-gamepad me-2" aria-hidden="true"></i>
-                    Ir al Rincón de Rayito
-                </a>
+                    <div class="d-flex flex-wrap gap-2 justify-content-center justify-content-lg-start mt-4">
 
-                <a href="/servicios" class="btn btn-outline-primary btn-lg fw-bold">
-                    Ver servicios
-                </a>
+                        <a href="/citas" class="btn btn-primary btn-lg fw-bold">
+                            <i class="fa-solid fa-calendar-plus me-2" aria-hidden="true"></i>
+                            Agendar una cita
+                        </a>
 
-            </div>
-
-        </div>
-
-        <div class="row mt-5">
-
-            <div class="col-md-4 mb-4 animate__animated animate__fadeInUp">
-
-                <div class="card shadow-sm h-100 evento-cards">
-
-                    <div class="card-body">
-
-                        <h4>Terapia Infantil</h4>
-                        <p>
-                            Atención psicológica enfocada
-                            en el bienestar emocional
-                            de niñas y niños.
-                        </p>
+                        <a href="/padres" class="btn btn-outline-primary btn-lg fw-bold">
+                            <i class="fa-solid fa-book-open me-2" aria-hidden="true"></i>
+                            Guías para padres
+                        </a>
 
                     </div>
 
-                </div>
-
-            </div>
-
-            <div class="col-md-4 mb-4 animate__animated animate__fadeInUp">
-
-                <div class="card shadow-sm h-100 evento-cards">
-
-                    <div class="card-body">
-
-                        <h4>Orientación Familiar</h4>
-                        <p>
-                            Apoyo y asesoría para madres,
-                            padres y tutores.
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="col-md-4 mb-4 animate__animated animate__fadeInUp">
-
-                <div class="card shadow-sm h-100 evento-cards">
-
-                    <div class="card-body">
-
-                        <h4>Evaluaciones</h4>
-                        <p>
-                            Evaluaciones psicológicas
-                            adaptadas a cada caso.
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="card shadow-sm p-4 mb-5 evento-cards">
-
-            <div class="row align-items-center g-3">
-
-                <div class="col-md-8">
-
-                    <h3 class="mb-2">
-                        🎈 Un espacio para jugar y aprender
-                    </h3>
-
-                    <p class="mb-0">
-                        En el Rincón de Rayito encontrarás un memorama de emociones,
-                        un ejercicio de respiración y un espacio para decir cómo te
-                        sientes hoy. Pensado para nuestras niñas y niños.
+                    <p class="hero-nota">
+                        <i class="fa-solid fa-location-dot me-1" aria-hidden="true"></i>
+                        Saltillo, Coahuila ·
+                        <i class="fa-solid fa-clock ms-2 me-1" aria-hidden="true"></i>
+                        Lunes a viernes, 9:00 a 18:00
                     </p>
 
                 </div>
 
-                <div class="col-md-4 text-md-end">
+                <div class="col-lg-6 text-center">
 
-                    <a href="/rincon" class="btn btn-primary">
-                        Entrar al Rincón
+                    <%- include('partials/mascota') %>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ================= PILARES ================= -->
+    <section class="franja-pilares" aria-label="Cómo trabajamos">
+
+        <div class="container">
+
+            <div class="row g-3 g-lg-4">
+
+                <% pilares.forEach(function (pilar) { %>
+
+                    <div class="col-6 col-lg-3">
+
+                        <div class="pilar">
+
+                            <i class="fa-solid <%= pilar.icono %> pilar-icono" aria-hidden="true"></i>
+                            <h3 class="pilar-titulo"><%= pilar.titulo %></h3>
+                            <p class="pilar-texto"><%= pilar.texto %></p>
+
+                        </div>
+
+                    </div>
+
+                <% }); %>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ================= SERVICIOS ================= -->
+    <section class="seccion" id="servicios">
+
+        <div class="container">
+
+            <div class="encabezado-seccion text-center">
+
+                <span class="etiqueta-seccion">Servicios</span>
+                <h2 class="seccion-titulo">Cómo podemos ayudar</h2>
+                <p class="seccion-intro texto-intro mx-auto">
+                    Cada proceso empieza con una entrevista para entender qué
+                    necesita la familia. De ahí se define un plan claro.
+                </p>
+
+            </div>
+
+            <div class="row g-4">
+
+                <div class="col-md-4">
+
+                    <article class="tarjeta-servicio h-100">
+
+                        <div class="servicio-icono tono-azul">
+                            <i class="fa-solid fa-child-reaching" aria-hidden="true"></i>
+                        </div>
+
+                        <h3>Terapia infantil</h3>
+                        <p>
+                            Atención psicológica para niñas y niños de 3 a 12 años:
+                            miedos, berrinches, duelo, ansiedad y cambios de conducta.
+                        </p>
+
+                    </article>
+
+                </div>
+
+                <div class="col-md-4">
+
+                    <article class="tarjeta-servicio h-100">
+
+                        <div class="servicio-icono tono-menta">
+                            <i class="fa-solid fa-people-roof" aria-hidden="true"></i>
+                        </div>
+
+                        <h3>Orientación familiar</h3>
+                        <p>
+                            Acompañamiento a madres, padres y tutores para acordar
+                            límites, mejorar la comunicación y sostener los cambios.
+                        </p>
+
+                    </article>
+
+                </div>
+
+                <div class="col-md-4">
+
+                    <article class="tarjeta-servicio h-100">
+
+                        <div class="servicio-icono tono-arena">
+                            <i class="fa-solid fa-clipboard-check" aria-hidden="true"></i>
+                        </div>
+
+                        <h3>Evaluaciones</h3>
+                        <p>
+                            Pruebas estandarizadas para valorar desarrollo,
+                            aprendizaje y estado emocional, con informe escrito.
+                        </p>
+
+                    </article>
+
+                </div>
+
+            </div>
+
+            <div class="text-center mt-4">
+                <a href="/servicios" class="btn btn-outline-primary">
+                    Ver todos los servicios
+                </a>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ================= SOBRE LA LICENCIADA ================= -->
+    <section class="seccion seccion--suave" id="licenciada">
+
+        <div class="container">
+
+            <div class="row align-items-center g-4 g-lg-5">
+
+                <div class="col-lg-4 text-center">
+
+                    <% if (licenciada.foto) { %>
+
+                        <img
+                            src="<%= licenciada.foto %>"
+                            alt="Fotografía de <%= licenciada.nombre %>"
+                            class="foto-licenciada"
+                            loading="lazy">
+
+                    <% } else { %>
+
+                        <div class="avatar-licenciada" aria-hidden="true">
+                            <i class="fa-solid fa-user-doctor"></i>
+                        </div>
+
+                    <% } %>
+
+                </div>
+
+                <div class="col-lg-8">
+
+                    <span class="etiqueta-seccion">Quién te acompaña</span>
+
+                    <h2 class="seccion-titulo mt-2"><%= licenciada.nombre %></h2>
+
+                    <p class="text-primary fw-bold mb-1"><%= licenciada.titulo %></p>
+                    <p class="text-muted small mb-3"><%= licenciada.cedula %></p>
+
+                    <p class="texto-intro"><%= licenciada.presentacion %></p>
+
+                    <h3 class="h6 mt-4 mb-2">Formación</h3>
+
+                    <ul class="lista-formacion">
+                        <% licenciada.formacion.forEach(function (item) { %>
+                            <li>
+                                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                                <%= item %>
+                            </li>
+                        <% }); %>
+                    </ul>
+
+                    <a href="/nosotros" class="btn btn-link px-0 fw-bold">
+                        Conoce el consultorio
                         <i class="fa-solid fa-arrow-right ms-1" aria-hidden="true"></i>
                     </a>
 
@@ -138,12 +243,239 @@
 
         </div>
 
-    </div>
+    </section>
+
+    <!-- ================= PARTICIPACIONES ================= -->
+    <section class="seccion" id="participaciones">
+
+        <div class="container">
+
+            <div class="encabezado-seccion">
+
+                <span class="etiqueta-seccion">Trayectoria</span>
+                <h2 class="seccion-titulo">Participaciones y actividades académicas</h2>
+                <p class="seccion-intro texto-intro">
+                    Ponencias, talleres y colaboraciones en las que ha participado
+                    la licenciada.
+                </p>
+
+            </div>
+
+            <ol class="linea-tiempo">
+
+                <% participaciones.forEach(function (p) { %>
+
+                    <li class="participacion">
+
+                        <span class="participacion-anio"><%= p.anio %></span>
+
+                        <div class="participacion-cuerpo">
+
+                            <span class="participacion-tipo"><%= p.tipo %></span>
+                            <h3><%= p.titulo %></h3>
+                            <p class="participacion-lugar">
+                                <i class="fa-solid fa-location-dot me-1" aria-hidden="true"></i>
+                                <%= p.lugar %>
+                            </p>
+
+                        </div>
+
+                    </li>
+
+                <% }); %>
+
+            </ol>
+
+        </div>
+
+    </section>
+
+    <!-- ================= ACTIVIDADES ================= -->
+    <section class="seccion seccion--suave" id="actividades">
+
+        <div class="container">
+
+            <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
+
+                <div>
+
+                    <span class="etiqueta-seccion">Día a día</span>
+                    <h2 class="seccion-titulo mt-2 mb-1">Nuestras actividades</h2>
+                    <p class="seccion-intro texto-intro mb-0">
+                        Lo que ocurre dentro del consultorio, más allá de la sesión.
+                    </p>
+
+                </div>
+
+                <a href="/actividades" class="btn btn-outline-primary btn-sm">
+                    Ver galería completa
+                </a>
+
+            </div>
+
+            <div class="carrusel" data-carrusel>
+
+                <button
+                    type="button"
+                    class="carrusel-flecha"
+                    data-dir="-1"
+                    aria-label="Actividades anteriores">
+                    <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+                </button>
+
+                <div class="carrusel-pista" data-pista tabindex="0">
+
+                    <% actividades.forEach(function (a) { %>
+
+                        <article class="tarjeta-actividad">
+
+                            <div class="actividad-visual tono-<%= a.tono %>">
+
+                                <% if (a.foto) { %>
+
+                                    <img src="<%= a.foto %>" alt="" loading="lazy">
+
+                                <% } else { %>
+
+                                    <i class="fa-solid <%= a.icono %>" aria-hidden="true"></i>
+
+                                <% } %>
+
+                            </div>
+
+                            <div class="actividad-texto">
+
+                                <h3><%= a.titulo %></h3>
+                                <p><%= a.descripcion %></p>
+
+                            </div>
+
+                        </article>
+
+                    <% }); %>
+
+                </div>
+
+                <button
+                    type="button"
+                    class="carrusel-flecha"
+                    data-dir="1"
+                    aria-label="Actividades siguientes">
+                    <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ================= NIÑOS / PADRES ================= -->
+    <section class="seccion">
+
+        <div class="container">
+
+            <div class="row g-4">
+
+                <div class="col-md-6">
+
+                    <div class="card shadow-sm h-100 evento-cards">
+
+                        <div class="card-body d-flex flex-column">
+
+                            <span class="etiqueta-seccion">Para niños y niñas</span>
+
+                            <h3 class="h4 mt-2 mb-2">
+                                🎈 Rincón de Rayito
+                            </h3>
+
+                            <p class="flex-grow-1">
+                                Memorama de emociones, respiración guiada y un espacio
+                                para decir cómo te sientes. Aprender jugando.
+                            </p>
+
+                            <a href="/rincon" class="btn btn-warning fw-bold align-self-start">
+                                Entrar al Rincón
+                                <i class="fa-solid fa-arrow-right ms-1" aria-hidden="true"></i>
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <div class="card shadow-sm h-100 evento-cards">
+
+                        <div class="card-body d-flex flex-column">
+
+                            <span class="etiqueta-seccion">Para la familia</span>
+
+                            <h3 class="h4 mt-2 mb-2">
+                                👨‍👩‍👧 Guías para padres
+                            </h3>
+
+                            <p class="flex-grow-1">
+                                Artículos breves sobre sueño, berrinches, pantallas y
+                                señales de alerta. Información clara para acompañar a tus hijos.
+                            </p>
+
+                            <a href="/padres" class="btn btn-primary fw-bold align-self-start">
+                                Leer las guías
+                                <i class="fa-solid fa-arrow-right ms-1" aria-hidden="true"></i>
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ================= CTA FINAL ================= -->
+    <section class="cta-final">
+
+        <div class="container text-center">
+
+            <h2 class="cta-titulo">Dar el primer paso también es cuidar</h2>
+
+            <p class="cta-texto texto-intro mx-auto">
+                Si algo te preocupa de tu hija o hijo, una primera conversación
+                ayuda a saber qué sigue. No necesitas un diagnóstico previo.
+            </p>
+
+            <div class="d-flex flex-wrap justify-content-center gap-2">
+
+                <a href="/citas" class="btn btn-light btn-lg fw-bold">
+                    <i class="fa-solid fa-calendar-plus me-2" aria-hidden="true"></i>
+                    Agendar una cita
+                </a>
+
+                <a href="/contacto" class="btn btn-outline-light btn-lg fw-bold">
+                    <i class="fa-solid fa-phone me-2" aria-hidden="true"></i>
+                    Contacto
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
 
 </main>
 
 <%- include('partials/alerts') %>
+
 <%- include('partials/footer') %>
+
+<script src="/js/carrusel.js"></script>
 
 </body>
 </html>

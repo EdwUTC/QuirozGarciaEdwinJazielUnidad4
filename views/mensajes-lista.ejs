@@ -1,0 +1,100 @@
+<%- include('partials/header', { titulo: titulo }) %>
+
+<body class="d-flex flex-column min-vh-100">
+
+<%- include('partials/navbar') %>
+
+<main class="flex-grow-1">
+
+    <div class="container mt-5">
+
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+
+            <div>
+
+                <span class="etiqueta-seccion">Bandeja</span>
+                <h1 class="seccion-titulo mt-2 mb-1">Mensajes de las familias</h1>
+                <p class="text-muted mb-0 small">
+                    Conversaciones privadas con cada paciente.
+                </p>
+
+            </div>
+
+            <a href="/dashboard" class="btn btn-outline-secondary btn-sm">
+                <i class="fa-solid fa-arrow-left me-1" aria-hidden="true"></i>
+                Volver al panel
+            </a>
+
+        </div>
+
+        <% if (conversaciones.length === 0) { %>
+
+            <div class="card shadow-sm">
+
+                <div class="card-body text-center py-5">
+
+                    <i class="fa-regular fa-envelope-open fs-1 text-muted" aria-hidden="true"></i>
+                    <p class="mt-3 mb-1 fw-bold">Aún no hay conversaciones.</p>
+                    <p class="text-muted small mb-0">
+                        Cuando un paciente escriba, aparecerá aquí.
+                    </p>
+
+                </div>
+
+            </div>
+
+        <% } else { %>
+
+            <div class="list-group shadow-sm">
+
+                <% conversaciones.forEach(function (c) { %>
+
+                    <a
+                        href="/mensajes/<%= c.id %>"
+                        class="list-group-item list-group-item-action lista-conversacion">
+
+                        <div class="conversacion-avatar" aria-hidden="true">
+                            <%= c.nombre.trim().charAt(0).toUpperCase() %>
+                        </div>
+
+                        <div class="conversacion-cuerpo">
+
+                            <div class="d-flex justify-content-between align-items-center gap-2">
+
+                                <span class="fw-bold"><%= c.nombre %></span>
+                                <span class="text-muted small text-nowrap">
+                                    <%= c.ultimo_texto_fecha %>
+                                </span>
+
+                            </div>
+
+                            <p class="text-muted small mb-0 conversacion-ultimo">
+                                <%= c.ultimo_texto %>
+                            </p>
+
+                        </div>
+
+                        <% if (Number(c.sin_leer) > 0) { %>
+                            <span class="badge bg-primary rounded-pill">
+                                <%= c.sin_leer %>
+                            </span>
+                        <% } %>
+
+                    </a>
+
+                <% }); %>
+
+            </div>
+
+        <% } %>
+
+    </div>
+
+</main>
+
+<%- include('partials/alerts') %>
+
+<%- include('partials/footer') %>
+
+</body>
+</html>

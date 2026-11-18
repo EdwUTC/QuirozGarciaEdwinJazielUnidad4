@@ -1,0 +1,95 @@
+<%- include('partials/header', { titulo: titulo }) %>
+
+<body class="d-flex flex-column min-vh-100">
+
+<%- include('partials/navbar') %>
+
+<main class="flex-grow-1">
+
+    <section class="seccion">
+
+        <div class="container">
+
+            <div class="encabezado-seccion">
+
+                <span class="etiqueta-seccion">Día a día</span>
+                <h1 class="seccion-titulo">Nuestras actividades</h1>
+                <p class="seccion-intro texto-intro">
+                    Talleres, terapia de juego y espacios para la familia.
+                    Si te interesa alguna, pregúntanos por la próxima fecha.
+                </p>
+
+            </div>
+
+            <div class="row g-4">
+
+                <% actividades.forEach(function (a) { %>
+
+                    <div class="col-md-6 col-lg-4">
+
+                        <article class="tarjeta-actividad h-100">
+
+                            <div class="actividad-visual tono-<%= a.tono %>">
+
+                                <% if (a.foto) { %>
+
+                                    <img src="<%= a.foto %>" alt="" loading="lazy">
+
+                                <% } else { %>
+
+                                    <i class="fa-solid <%= a.icono %>" aria-hidden="true"></i>
+
+                                <% } %>
+
+                            </div>
+
+                            <div class="actividad-texto">
+
+                                <h2 class="h5"><%= a.titulo %></h2>
+                                <p><%= a.descripcion %></p>
+
+                            </div>
+
+                        </article>
+
+                    </div>
+
+                <% }); %>
+
+            </div>
+
+            <div class="aviso-contenido mt-5">
+
+                <strong>¿Quieres que tu hija o hijo participe?</strong>
+                Las actividades se anuncian a las familias del consultorio.
+                Escríbenos por <a href="/contacto">contacto</a> o agenda una
+                <a href="/citas">cita</a> para conocer la próxima fecha.
+
+            </div>
+
+            <div class="d-flex flex-wrap gap-2 mt-4">
+
+                <a href="/padres" class="btn btn-outline-primary">
+                    <i class="fa-solid fa-book-open me-2" aria-hidden="true"></i>
+                    Guías para padres
+                </a>
+
+                <a href="/rincon" class="btn btn-warning fw-bold">
+                    <i class="fa-solid fa-gamepad me-2" aria-hidden="true"></i>
+                    Rincón de Rayito
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+<%- include('partials/alerts') %>
+
+<%- include('partials/footer') %>
+
+</body>
+</html>
