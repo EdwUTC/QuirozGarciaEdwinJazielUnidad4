@@ -473,6 +473,31 @@ body.dark-mode .respiracion-cuenta {
     }
 }
 
+/* ---------------- Globo de Rayito en una sola columna ----------------
+   Mientras el hero está apilado (menos de 992px) el globo quedaría
+   encima de los botones, así que pasa a ser un aviso flotante abajo. */
+@media (max-width: 991.98px) {
+    .rayito-burbuja {
+        position: fixed;
+        left: 50%;
+        bottom: 1rem;
+        top: auto;
+        z-index: 3000;
+        max-width: calc(100% - 2rem);
+        white-space: normal;
+        text-align: center;
+        transform: translateX(-50%) scale(0.9);
+    }
+
+    .rayito-burbuja.visible {
+        transform: translateX(-50%) scale(1);
+    }
+
+    .rayito-burbuja::after {
+        display: none;
+    }
+}
+
 /* ---------------- Móvil ---------------- */
 @media (max-width: 575.98px) {
     .memorama {
