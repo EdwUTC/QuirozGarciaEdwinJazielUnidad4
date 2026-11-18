@@ -8,6 +8,45 @@
     "use strict";
 
     /* =========================================================
+       Medallas (se guardan en este navegador)
+       ========================================================= */
+    const CLAVE_LOGROS = "rayito-logros";
+
+    function leerLogros() {
+        try {
+            return JSON.parse(localStorage.getItem(CLAVE_LOGROS)) || {};
+        } catch (error) {
+            return {};
+        }
+    }
+
+    function pintarLogros() {
+        const logros = leerLogros();
+
+        document.querySelectorAll("[data-logro]").forEach((medalla) => {
+            medalla.classList.toggle("ganada", Boolean(logros[medalla.dataset.logro]));
+        });
+    }
+
+    function desbloquear(clave) {
+        const logros = leerLogros();
+
+        if (logros[clave]) return;
+
+        logros[clave] = true;
+
+        try {
+            localStorage.setItem(CLAVE_LOGROS, JSON.stringify(logros));
+        } catch (error) {
+            /* Si el navegador bloquea el almacenamiento, se ignora. */
+        }
+
+        pintarLogros();
+
+        if (window.Rayito) window.Rayito.confeti(35);
+    }
+
+    /* =========================================================
        1. Memorama de emociones
        ========================================================= */
     const EMOCIONES = [
@@ -124,6 +163,7 @@
                             `¡Excelente! Encontraste todos los pares en ${intentos} intentos 🎉`;
                     }
                     if (window.Rayito) window.Rayito.confeti(90);
+                    desbloquear("memorama");
                 }
             } else {
                 const a = primera;
@@ -216,6 +256,8 @@
 
                 panel.hidden = false;
                 panel.focus();
+
+                desbloquear("emocion");
             });
         });
     }
@@ -284,6 +326,7 @@
                 if (siguiente === 0) {
                     ciclo++;
                     if (cicloEl) cicloEl.textContent = String(ciclo);
+                    if (ciclo >= 3) desbloquear("respiracion");
                 }
 
                 temporizador = setTimeout(() => fase(siguiente), 300);
@@ -314,5 +357,6 @@
         crearMemorama();
         crearEmociones();
         crearRespiracion();
+        pintarLogros();
     });
 })();

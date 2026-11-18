@@ -1,0 +1,128 @@
+<%- include('partials/header', { titulo: titulo }) %>
+
+<body class="d-flex flex-column min-vh-100">
+
+<div class="cielo" aria-hidden="true">
+    <div class="nube nube-1"></div>
+    <div class="nube nube-2"></div>
+    <div class="nube nube-3"></div>
+</div>
+
+<%- include('partials/navbar') %>
+
+<main class="flex-grow-1">
+
+    <div class="container mt-5">
+
+        <div class="text-center mb-5 animate__animated animate__fadeInDown">
+
+            <span class="etiqueta-seccion">Para la familia</span>
+
+            <h1 class="display-6 mt-2">
+                Para madres, padres y cuidadores
+            </h1>
+
+            <p class="lead mx-auto texto-intro">
+                Información clara y basada en evidencia para acompañar
+                el desarrollo emocional de tus hijos.
+            </p>
+
+        </div>
+
+        <!-- Filtros por categoría -->
+        <div class="d-flex flex-wrap justify-content-center gap-2 mb-5">
+
+            <a href="/padres" class="btn btn-sm btn-filtro <%= !activa ? 'activo' : '' %>">
+                Todas
+            </a>
+
+            <% categorias.forEach(function (c) { %>
+
+                <a
+                    href="/padres?categoria=<%= encodeURIComponent(c.categoria) %>"
+                    class="btn btn-sm btn-filtro <%= activa === c.categoria ? 'activo' : '' %>">
+
+                    <%= c.categoria %>
+                    <span class="contador"><%= c.total %></span>
+
+                </a>
+
+            <% }); %>
+
+        </div>
+
+        <% if (recursos.length === 0) { %>
+
+            <div class="text-center text-muted py-5">
+                Todavía no hay artículos en esta categoría.
+            </div>
+
+        <% } else { %>
+
+            <div class="row g-4">
+
+                <% recursos.forEach(function (r) { %>
+
+                    <div class="col-md-6 col-lg-4">
+
+                        <article class="card h-100 recurso-card">
+
+                            <div class="card-body d-flex flex-column">
+
+                                <span class="badge-categoria"><%= r.categoria %></span>
+
+                                <h2 class="h5 mt-3 mb-2">
+                                    <a href="/padres/<%= r.slug %>" class="recurso-enlace">
+                                        <%= r.titulo %>
+                                    </a>
+                                </h2>
+
+                                <p class="text-muted small flex-grow-1 mb-3">
+                                    <%= r.resumen %>
+                                </p>
+
+                                <p class="recurso-meta mb-0">
+                                    <i class="fa-regular fa-clock me-1" aria-hidden="true"></i>
+                                    <%= r.minutos %> min
+                                    <% if (r.edad_sugerida) { %>
+                                        <span class="separador">·</span>
+                                        <%= r.edad_sugerida %>
+                                    <% } %>
+                                </p>
+
+                            </div>
+
+                        </article>
+
+                    </div>
+
+                <% }); %>
+
+            </div>
+
+        <% } %>
+
+        <div class="aviso-contenido mt-5">
+
+            <p class="mb-1">
+                <strong>Importante:</strong> este material es informativo y no sustituye
+                una evaluación profesional.
+            </p>
+
+            <p class="mb-0">
+                Si tienes dudas sobre tu hijo, agenda una cita con nuestro equipo.
+                <a href="/citas">Agendar una cita</a>
+            </p>
+
+        </div>
+
+    </div>
+
+</main>
+
+<%- include('partials/alerts') %>
+
+<%- include('partials/footer') %>
+
+</body>
+</html>

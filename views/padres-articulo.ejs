@@ -1,0 +1,146 @@
+<%- include('partials/header', { titulo: titulo }) %>
+
+<body class="d-flex flex-column min-vh-100">
+
+<div class="cielo" aria-hidden="true">
+    <div class="nube nube-1"></div>
+    <div class="nube nube-2"></div>
+    <div class="nube nube-3"></div>
+</div>
+
+<%- include('partials/navbar') %>
+
+<main class="flex-grow-1">
+
+    <div class="container mt-5">
+
+        <nav aria-label="Ruta de navegación">
+
+            <ol class="breadcrumb small">
+
+                <li class="breadcrumb-item">
+                    <a href="/padres">Para padres y cuidadores</a>
+                </li>
+
+                <li class="breadcrumb-item active" aria-current="page">
+                    <%= articulo.categoria %>
+                </li>
+
+            </ol>
+
+        </nav>
+
+        <article class="articulo">
+
+            <header class="mb-4">
+
+                <span class="badge-categoria"><%= articulo.categoria %></span>
+
+                <h1 class="display-6 mt-3 mb-3">
+                    <%= articulo.titulo %>
+                </h1>
+
+                <p class="lead texto-intro mb-2">
+                    <%= articulo.resumen %>
+                </p>
+
+                <p class="recurso-meta mb-0">
+                    <i class="fa-regular fa-clock me-1" aria-hidden="true"></i>
+                    <%= articulo.minutos %> min de lectura
+
+                    <% if (articulo.edad_sugerida) { %>
+                        <span class="separador">·</span>
+                        <%= articulo.edad_sugerida %>
+                    <% } %>
+                </p>
+
+            </header>
+
+            <div class="articulo-cuerpo">
+
+                <% bloques.forEach(function (bloque) { %>
+
+                    <% if (bloque.tipo === 'lista') { %>
+
+                        <ul>
+                            <% bloque.items.forEach(function (item) { %>
+                                <li><%= item %></li>
+                            <% }); %>
+                        </ul>
+
+                    <% } else { %>
+
+                        <p><%= bloque.texto %></p>
+
+                    <% } %>
+
+                <% }); %>
+
+            </div>
+
+            <div class="aviso-contenido mt-4">
+
+                <p class="mb-1">
+                    <strong>Recuerda:</strong> este artículo es informativo y no
+                    sustituye una evaluación profesional.
+                </p>
+
+                <p class="mb-0">
+                    Si estos temas te preocupan en tu hijo,
+                    <a href="/citas">agenda una cita</a> o escríbenos desde
+                    <a href="/contacto">contacto</a>.
+                </p>
+
+            </div>
+
+        </article>
+
+        <% if (relacionados.length > 0) { %>
+
+            <section class="mt-5">
+
+                <h2 class="h5 mb-3">Sigue leyendo</h2>
+
+                <div class="row g-3">
+
+                    <% relacionados.forEach(function (r) { %>
+
+                        <div class="col-md-4">
+
+                            <a href="/padres/<%= r.slug %>" class="card card-body recurso-card h-100 text-decoration-none">
+
+                                <span class="badge-categoria"><%= r.categoria %></span>
+
+                                <span class="mt-2 fw-bold text-body"><%= r.titulo %></span>
+
+                            </a>
+
+                        </div>
+
+                    <% }); %>
+
+                </div>
+
+            </section>
+
+        <% } %>
+
+        <div class="text-center my-5">
+
+            <a href="/padres" class="btn btn-outline-primary">
+                <i class="fa-solid fa-arrow-left me-2" aria-hidden="true"></i>
+                Volver a todos los artículos
+            </a>
+
+        </div>
+
+    </div>
+
+</main>
+
+<%- include('partials/alerts') %>
+
+<%- include('partials/footer') %>
+
+</body>
+</html>

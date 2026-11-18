@@ -1,0 +1,142 @@
+<%- include('partials/header', { titulo: titulo }) %>
+
+<body class="d-flex flex-column min-vh-100">
+
+<%- include('partials/navbar') %>
+
+<main class="flex-grow-1">
+
+    <div class="container mt-5">
+
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+
+            <div>
+
+                <span class="etiqueta-seccion">
+                    <%= esStaff ? 'Conversación' : 'Canal privado' %>
+                </span>
+
+                <h1 class="seccion-titulo mt-2 mb-1">
+                    <%= esStaff ? ('Mensajes con ' + paciente.nombre) : 'Mensajes con la licenciada' %>
+                </h1>
+
+                <p class="text-muted mb-0 small">
+                    <%= esStaff
+                        ? paciente.correo
+                        : 'Este canal es privado: solo tú y la licenciada pueden leerlo.' %>
+                </p>
+
+            </div>
+
+            <a href="/dashboard" class="btn btn-outline-secondary btn-sm">
+                <i class="fa-solid fa-arrow-left me-1" aria-hidden="true"></i>
+                Volver al panel
+            </a>
+
+        </div>
+
+        <div class="card shadow-sm">
+
+            <div class="card-body p-0">
+
+                <div
+                    class="hilo-mensajes"
+                    data-mensajes
+                    data-total="<%= mensajes.length %>"
+                    data-estado="/api/mensajes/estado<%= esStaff ? ('?usuario=' + usuarioId) : '' %>">
+
+                    <% if (mensajes.length === 0) { %>
+
+                        <div class="hilo-vacio">
+
+                            <i class="fa-regular fa-comments" aria-hidden="true"></i>
+
+                            <p class="mb-1 fw-bold">
+                                <%= esStaff
+                                    ? 'Todavía no hay mensajes con este paciente.'
+                                    : 'Aún no hay mensajes.' %>
+                            </p>
+
+                            <p class="text-muted small mb-0">
+                                <%= esStaff
+                                    ? 'Escribe abajo para iniciar la conversación.'
+                                    : 'Escríbenos si tienes una duda sobre el proceso, una cita o algo que te preocupe.' %>
+                            </p>
+
+                        </div>
+
+                    <% } %>
+
+                    <% mensajes.forEach(function (m) { %>
+
+                        <% var esMio = esStaff ? (m.autor === 'licenciada') : (m.autor === 'paciente'); %>
+
+                        <div class="mensaje <%= esMio ? 'mensaje--mio' : 'mensaje--otro' %>">
+
+                            <div class="mensaje-burbuja">
+
+                                <p class="mensaje-texto"><%= m.texto %></p>
+
+                                <span class="mensaje-fecha">
+                                    <%= esMio
+                                        ? 'Tú'
+                                        : (m.autor === 'licenciada' ? 'Licenciada' : 'Paciente') %>
+                                    · <%= m.fecha %>
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    <% }); %>
+
+                </div>
+
+                <form action="<%= accion %>" method="POST" class="form-mensaje">
+
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+                    <% if (esStaff) { %>
+                        <input type="hidden" name="usuario_id" value="<%= usuarioId %>">
+                    <% } %>
+
+                    <label for="texto" class="visually-hidden">Escribe tu mensaje</label>
+
+                    <textarea
+                        id="texto"
+                        name="texto"
+                        rows="2"
+                        maxlength="1000"
+                        class="form-control"
+                        placeholder="Escribe tu mensaje…"
+                        required></textarea>
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa-solid fa-paper-plane me-1" aria-hidden="true"></i>
+                        Enviar
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+        <p class="text-muted small mt-3 mb-0">
+            <i class="fa-solid fa-lock me-1" aria-hidden="true"></i>
+            Por seguridad, no compartas datos sensibles como contraseñas o
+            números de tarjeta. Si es una urgencia, llama al consultorio.
+        </p>
+
+    </div>
+
+</main>
+
+<%- include('partials/alerts') %>
+
+<%- include('partials/footer') %>
+
+<script src="/js/mensajes.js"></script>
+
+</body>
+</html>

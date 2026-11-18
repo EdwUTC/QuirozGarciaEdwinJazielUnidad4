@@ -217,6 +217,85 @@
 
             </div>
 
+            <!-- ================= Medallas ================= -->
+            <div class="col-12">
+
+                <section class="seccion-juego" aria-labelledby="titulo-medallas">
+
+                    <h2 id="titulo-medallas" class="mb-1">
+                        🏅 Tus medallas
+                    </h2>
+
+                    <p class="text-muted small mb-3">
+                        Se guardan en este dispositivo. ¡Intenta conseguirlas todas!
+                    </p>
+
+                    <div class="medallas" id="medallas">
+
+                        <span class="medalla" data-logro="memorama">
+                            <span class="icono" aria-hidden="true">🎴</span>
+                            Memorama completado
+                        </span>
+
+                        <span class="medalla" data-logro="respiracion">
+                            <span class="icono" aria-hidden="true">🌬️</span>
+                            3 ciclos de respiración
+                        </span>
+
+                        <span class="medalla" data-logro="emocion">
+                            <span class="icono" aria-hidden="true">💬</span>
+                            Compartí cómo me siento
+                        </span>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+            <!-- ================= Aprende las emociones ================= -->
+            <div class="col-12">
+
+                <section class="seccion-juego" aria-labelledby="titulo-aprende">
+
+                    <h2 id="titulo-aprende" class="mb-1">
+                        🧠 Aprende las emociones
+                    </h2>
+
+                    <p class="text-muted small mb-3">
+                        Toca cada carita para descubrir cómo se siente y qué puede ayudarte.
+                    </p>
+
+                    <div class="row g-3">
+
+                        <% emociones.forEach(function (e) { %>
+
+                            <div class="col-md-6 col-lg-4">
+
+                                <details class="aprende-emocion">
+
+                                    <summary>
+                                        <span class="emoji-grande" aria-hidden="true"><%= e.emoji %></span>
+                                        <span><%= e.nombre %></span>
+                                    </summary>
+
+                                    <div class="detalle">
+                                        <p><strong>Se siente:</strong> <%= e.siente %></p>
+                                        <p class="mb-0"><strong>Qué ayuda:</strong> <%= e.ayuda %></p>
+                                    </div>
+
+                                </details>
+
+                            </div>
+
+                        <% }); %>
+
+                    </div>
+
+                </section>
+
+            </div>
+
         </div>
 
     </div>

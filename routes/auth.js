@@ -34,9 +34,8 @@ async function tokenValido(token) {
 }
 
 // ---------------- Inicio ----------------
-router.get("/", (req, res) => {
-    res.render("index");
-});
+// La portada se atiende en routes/public.js, que necesita consultar los
+// especialistas de la base de datos.
 
 // ---------------- Login ----------------
 router.get("/login", (req, res) => {

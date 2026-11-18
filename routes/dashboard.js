@@ -168,41 +168,13 @@ router.post("/buzon", protegerRuta, async (req, res) => {
 });
 
 /* =========================================================
-   Chat de comentarios (área privada)
-   ========================================================= */
-router.get("/chat", protegerRuta, async (req, res) => {
-    try {
-        const mensajes = await conexion.query(`SELECT * FROM chat ORDER BY fecha ASC`);
-
-        res.render("chat", {
-            titulo: "Chat",
-            nombre: req.session.nombre,
-            mensajes: mensajes.rows
-        });
-    } catch (error) {
-        console.error("Error al cargar el chat:", error);
-        res.status(500).send("Error al cargar el chat");
-    }
-});
-
-router.post("/chat", protegerRuta, async (req, res) => {
-    const mensaje = String(req.body.mensaje || "").trim();
-
-    if (!mensaje) {
-        return res.redirect("/chat");
-    }
-
-    try {
-        await conexion.query(
-            `INSERT INTO chat (usuario, mensaje, fecha) VALUES ($1, $2, NOW())`,
-            [req.session.nombre, mensaje]
-        );
-        res.redirect("/chat");
-    } catch (error) {
-        console.error("Error al enviar mensaje:", error);
-        res.status(500).send("Error al enviar mensaje");
-    }
-});
+   Chat antiguo -> mensajería privada
+   =========================================================
+   El "chat" mostraba los mensajes de todos los pacientes a
+   cualquier usuario con sesión. Se sustituyó por /mensajes,
+   que es privado entre cada paciente y la licenciada. */
+router.get("/chat", protegerRuta, (req, res) => res.redirect("/mensajes"));
+router.post("/chat", protegerRuta, (req, res) => res.redirect("/mensajes"));
 
 /* =========================================================
    Cerrar sesión

@@ -13,13 +13,9 @@ const conexion = require("../database/conexion");
 const { protegerRuta, protegerRol } = require("./middleware");
 const { idUsuario } = require("../services/usuario");
 const { EMOCIONES } = require("../services/emociones");
+const { HORARIOS, esFecha, crearCita, cancelarCita } = require("../services/citas");
 
-const HORARIOS = ["09:00", "10:00", "11:00", "12:00", "13:00", "16:00", "17:00", "18:00"];
 const MIN_PASSWORD = 8;
-
-function esFecha(valor) {
-    return /^\d{4}-\d{2}-\d{2}$/.test(String(valor)) && !Number.isNaN(Date.parse(valor));
-}
 
 /* =========================================================
    CITAS
@@ -71,114 +67,42 @@ router.get("/citas", protegerRuta, async (req, res) => {
 
 // Agendar una cita.
 router.post("/citas", protegerRuta, async (req, res) => {
-    const especialistaId = Number(req.body.especialista_id);
-    const fecha = String(req.body.fecha || "");
-    const hora = String(req.body.hora || "");
-    const motivo = String(req.body.motivo || "").trim();
+    const usuarioId = await idUsuario(req);
+    if (!usuarioId) return res.redirect("/login");
 
-    function error(texto) {
-        req.session.mensaje = { tipo: "error", texto };
+    const resultado = await crearCita({
+        usuarioId,
+        especialistaId: Number(req.body.especialista_id),
+        fecha: String(req.body.fecha || ""),
+        hora: String(req.body.hora || ""),
+        motivo: String(req.body.motivo || "").trim()
+    });
+
+    if (!resultado.ok) {
+        req.session.mensaje = {
+            tipo: resultado.codigo === 409 ? "warning" : "error",
+            texto: resultado.error
+        };
+
         return res.redirect("/citas");
     }
 
-    if (!Number.isInteger(especialistaId) || especialistaId <= 0) {
-        return error("Elige un especialista");
-    }
-    if (!esFecha(fecha)) {
-        return error("Elige una fecha válida");
-    }
-    if (!HORARIOS.includes(hora)) {
-        return error("Elige un horario válido");
-    }
-    if (motivo.length < 5) {
-        return error("Describe el motivo de la consulta (mínimo 5 caracteres)");
-    }
-    if (motivo.length > 600) {
-        return error("El motivo es demasiado largo");
-    }
-
-    try {
-        const usuarioId = await idUsuario(req);
-        if (!usuarioId) return res.redirect("/login");
-
-        // La fecha y la hora se validan contra el reloj de la base de datos:
-        // no se permite agendar en el pasado ni a una hora que ya pasó hoy.
-        const rango = await conexion.query(
-            `SELECT ($1::date + $2::time) > LOCALTIMESTAMP           AS futura,
-                    $1::date >= CURRENT_DATE                        AS de_hoy_en_adelante,
-                    $1::date <= (CURRENT_DATE + INTERVAL '6 months') AS dentro_del_rango`,
-            [fecha, hora]
-        );
-
-        const chequeo = rango.rows[0];
-
-        if (!chequeo.de_hoy_en_adelante) {
-            return error("La fecha debe ser de hoy en adelante");
-        }
-
-        if (!chequeo.dentro_del_rango) {
-            return error("La fecha debe estar dentro de los próximos 6 meses");
-        }
-
-        if (!chequeo.futura) {
-            return error("Esa hora ya pasó. Elige un horario más tarde.");
-        }
-
-        const especialista = await conexion.query(
-            "SELECT id FROM especialistas WHERE id = $1 AND activo = true",
-            [especialistaId]
-        );
-
-        if (especialista.rows.length === 0) {
-            return error("El especialista no está disponible");
-        }
-
-        await conexion.query(
-            `INSERT INTO citas (usuario_id, especialista_id, fecha, hora, motivo)
-             VALUES ($1, $2, $3, $4, $5)`,
-            [usuarioId, especialistaId, fecha, hora, motivo]
-        );
-
-        req.session.mensaje = { tipo: "success", texto: "Cita agendada correctamente" };
-        res.redirect("/citas");
-    } catch (error) {
-        if (error && error.code === "23505") {
-            req.session.mensaje = {
-                tipo: "warning",
-                texto: "Ese horario ya está ocupado. Elige otro."
-            };
-            return res.redirect("/citas");
-        }
-
-        console.error("Error al agendar la cita:", error);
-        req.session.mensaje = { tipo: "error", texto: "No se pudo agendar la cita" };
-        res.redirect("/citas");
-    }
+    req.session.mensaje = { tipo: "success", texto: "Cita agendada correctamente" };
+    res.redirect("/citas");
 });
 
 // Cancelar una cita propia.
 router.post("/citas/:id/cancelar", protegerRuta, async (req, res) => {
-    const id = Number(req.params.id);
+    const usuarioId = await idUsuario(req);
 
-    try {
-        const usuarioId = await idUsuario(req);
+    const resultado = await cancelarCita({
+        usuarioId,
+        citaId: Number(req.params.id)
+    });
 
-        const resultado = await conexion.query(
-            `UPDATE citas
-                SET estado = 'cancelada'
-              WHERE id = $1 AND usuario_id = $2
-                AND estado IN ('pendiente', 'confirmada')
-              RETURNING id`,
-            [id, usuarioId]
-        );
-
-        req.session.mensaje = resultado.rowCount > 0
-            ? { tipo: "success", texto: "Cita cancelada" }
-            : { tipo: "warning", texto: "La cita no existe o ya no se puede cancelar" };
-    } catch (error) {
-        console.error("Error al cancelar la cita:", error);
-        req.session.mensaje = { tipo: "error", texto: "No se pudo cancelar la cita" };
-    }
+    req.session.mensaje = resultado.ok
+        ? { tipo: "success", texto: "Cita cancelada" }
+        : { tipo: resultado.codigo === 404 ? "warning" : "error", texto: resultado.error };
 
     res.redirect("/citas");
 });

@@ -4,7 +4,7 @@
 // (probar contraseñas) y el abuso de los formularios públicos.
 const { rateLimit } = require("express-rate-limit");
 
-function crearLimitador({ windowMs, limite, texto, saltarExitosos = false }) {
+function crearLimitador({ windowMs, limite, texto, saltarExitosos = false, json = false }) {
     return rateLimit({
         windowMs,
         limit: limite,
@@ -12,9 +12,13 @@ function crearLimitador({ windowMs, limite, texto, saltarExitosos = false }) {
         legacyHeaders: false,
         // Si es true, las respuestas correctas (status < 400) no cuentan.
         skipSuccessfulRequests: saltarExitosos,
-        // Cuando se supera el límite se responde con un 429 real y una
-        // página clara (antes el redirect ocultaba el código de estado).
+        // Cuando se supera el límite se responde con un 429 real
+        // (antes el redirect ocultaba el código de estado).
         handler: (req, res) => {
+            if (json) {
+                return res.status(429).json({ ok: false, error: texto });
+            }
+
             return res.status(429).render("error", {
                 titulo: "Demasiados intentos",
                 codigo: 429,
@@ -48,4 +52,13 @@ const limiteRecuperacion = crearLimitador({
     texto: "Demasiadas solicitudes de recuperación. Inténtalo más tarde."
 });
 
-module.exports = { limiteLogin, limiteRegistro, limiteRecuperacion };
+// 120 peticiones por minuto a la API por IP.
+// El chat consulta su estado cada 10 segundos, así que el margen es amplio.
+const limiteApi = crearLimitador({
+    windowMs: 60 * 1000,
+    limite: 120,
+    json: true,
+    texto: "Demasiadas peticiones a la API. Espera un minuto."
+});
+
+module.exports = { limiteLogin, limiteRegistro, limiteRecuperacion, limiteApi };
