@@ -10,7 +10,9 @@ const {
     LICENCIADA,
     PILARES,
     PARTICIPACIONES,
-    ACTIVIDADES
+    ACTIVIDADES,
+    SERVICIOS,
+    PROCESO
 } = require("../services/contenido");
 
 // Especialistas activos, tomados de la base de datos.
@@ -52,7 +54,11 @@ router.get("/nosotros", (req, res) => {
 });
 
 router.get("/servicios", (req, res) => {
-    res.render("servicios", { titulo: "Servicios" });
+    res.render("servicios", {
+        titulo: "Servicios",
+        servicios: SERVICIOS,
+        proceso: PROCESO
+    });
 });
 
 router.get("/especialistas", async (req, res) => {

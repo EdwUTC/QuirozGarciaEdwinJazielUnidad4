@@ -6,40 +6,140 @@
 
 <main class="flex-grow-1">
 
-    <div class="container mt-5">
+    <section class="pagina-hero">
 
-        <h1 class="text-primary mb-4 animate__animated animate__fadeInLeft">Servicios</h1>
+        <div class="container">
 
-        <div class="row">
+            <span class="etiqueta-seccion">Servicios</span>
 
-            <div class="col-md-4 animate__animated animate__fadeInLeft ">
-                <div class="card shadow-sm p-3 mb-3 evento-cards">
-                    <h4>Terapia Infantil</h4>
-                    <p>Atención especializada para niñas y niños.</p>
-                </div>
-            </div>
+            <h1>Cómo podemos ayudar</h1>
 
-            <div class="col-md-4 animate__animated animate__fadeInLeft ">
-                <div class="card shadow-sm p-3 mb-3 evento-cards">
-                    <h4>Orientación Familiar</h4>
-                    <p>Apoyo para madres, padres y tutores.</p>
-                </div>
-            </div>
+            <p>
+                Tres formas de trabajo que se combinan según lo que necesite cada
+                familia. Antes de empezar te explicamos qué incluye, cuánto dura y
+                qué puedes esperar.
+            </p>
 
-            <div class="col-md-4 animate__animated animate__fadeInLeft ">
-                <div class="card shadow-sm p-3 mb-3 evento-cards">
-                    <h4>Evaluaciones Psicológicas</h4>
-                    <p>Valoraciones adaptadas a cada paciente.</p>
-                </div>
+        </div>
+
+    </section>
+
+    <section class="seccion">
+
+        <div class="container">
+
+            <div class="row g-4">
+
+                <% servicios.forEach(function (s) { %>
+
+                    <div class="col-lg-4">
+
+                        <article class="tarjeta-detalle">
+
+                            <div class="servicio-icono tono-<%= s.tono %>">
+                                <i class="fa-solid <%= s.icono %>" aria-hidden="true"></i>
+                            </div>
+
+                            <h2><%= s.titulo %></h2>
+
+                            <p class="resumen"><%= s.resumen %></p>
+
+                            <div class="detalle-datos">
+                                <span>
+                                    <i class="fa-solid fa-user-group" aria-hidden="true"></i>
+                                    <%= s.para %>
+                                </span>
+                                <span>
+                                    <i class="fa-regular fa-clock" aria-hidden="true"></i>
+                                    <%= s.duracion %>
+                                </span>
+                            </div>
+
+                            <h3 class="h6 fw-bold">Qué incluye</h3>
+
+                            <ul class="detalle-lista">
+                                <% s.incluye.forEach(function (item) { %>
+                                    <li>
+                                        <i class="fa-solid fa-check" aria-hidden="true"></i>
+                                        <%= item %>
+                                    </li>
+                                <% }); %>
+                            </ul>
+
+                        </article>
+
+                    </div>
+
+                <% }); %>
+
             </div>
 
         </div>
 
-    </div>
+    </section>
+
+    <section class="seccion seccion--suave">
+
+        <div class="container">
+
+            <div class="encabezado-seccion">
+
+                <span class="etiqueta-seccion">El proceso</span>
+                <h2 class="seccion-titulo">Qué pasa desde que llamas hasta que terminas</h2>
+
+            </div>
+
+            <div class="proceso">
+
+                <% proceso.forEach(function (paso, indice) { %>
+
+                    <div class="paso-proceso">
+
+                        <span class="paso-numero" aria-hidden="true"><%= indice + 1 %></span>
+
+                        <h3><%= paso.titulo %></h3>
+                        <p><%= paso.texto %></p>
+
+                    </div>
+
+                <% }); %>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="seccion">
+
+        <div class="container">
+
+            <div class="aviso-contenido">
+
+                <strong>Importante:</strong> estos servicios no sustituyen una
+                atención médica de urgencia. Si hay riesgo para la integridad de
+                alguien, llama al <strong>911</strong> o acude al servicio de
+                emergencias más cercano.
+
+            </div>
+
+            <div class="text-center mt-4">
+
+                <a href="/citas" class="btn btn-primary btn-lg fw-bold">
+                    <i class="fa-solid fa-calendar-plus me-2" aria-hidden="true"></i>
+                    Agendar una cita
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
 
 </main>
 
 <%- include('partials/alerts') %>
+
 <%- include('partials/footer') %>
 
 </body>

@@ -83,7 +83,13 @@
         }
 
         // Saluda al entrar a la página.
-        setTimeout(decir, 1200);
+        // En pantallas chicas el globo se muestra como aviso flotante, así
+        // que solo aparece cuando el usuario toca a la mascota.
+        const pantallaChica = window.matchMedia("(max-width: 991.98px)").matches;
+
+        if (!pantallaChica) {
+            setTimeout(decir, 1200);
+        }
     }
 
     /* ---------------------------------------------------------
