@@ -139,9 +139,91 @@ const ACTIVIDADES = [
     }
 ];
 
+// Servicios con el detalle que una familia necesita antes de llamar.
+const SERVICIOS = [
+    {
+        icono: "fa-child-reaching",
+        tono: "azul",
+        titulo: "Terapia infantil",
+        resumen:
+            "Atención psicológica para niñas y niños de 3 a 12 años: miedos, " +
+            "berrinches, duelo, ansiedad y cambios de conducta.",
+        para: "Niñas y niños de 3 a 12 años",
+        duracion: "45 a 50 minutos por sesión",
+        incluye: [
+            "Entrevista inicial con la familia",
+            "Objetivos terapéuticos por escrito",
+            "Sesiones de juego y palabra según la edad",
+            "Retroalimentación periódica a los padres"
+        ]
+    },
+    {
+        icono: "fa-people-roof",
+        tono: "menta",
+        titulo: "Orientación familiar",
+        resumen:
+            "Acompañamiento a madres, padres y tutores para acordar límites, " +
+            "mejorar la comunicación y sostener los cambios en casa.",
+        para: "Madres, padres y cuidadores",
+        duracion: "50 minutos por sesión",
+        incluye: [
+            "Revisión de rutinas y acuerdos familiares",
+            "Estrategias de disciplina positiva",
+            "Manejo de berrinches y pantallas",
+            "Coordinación con la escuela si hace falta"
+        ]
+    },
+    {
+        icono: "fa-clipboard-check",
+        tono: "arena",
+        titulo: "Evaluaciones psicológicas",
+        resumen:
+            "Valoraciones con pruebas estandarizadas para entender el " +
+            "desarrollo, el aprendizaje y el estado emocional del menor.",
+        para: "Cuando se necesita un informe o una segunda opinión",
+        duracion: "2 a 3 sesiones + entrega de resultados",
+        incluye: [
+            "Aplicación de pruebas según el motivo",
+            "Entrevista con padres y escuela",
+            "Informe escrito con recomendaciones",
+            "Sesión de devolución de resultados"
+        ]
+    }
+];
+
+// Cómo es el proceso, paso a paso.
+const PROCESO = [
+    {
+        titulo: "Primera conversación",
+        texto:
+            "Una entrevista con la familia para entender qué está pasando y " +
+            "qué esperan del proceso."
+    },
+    {
+        titulo: "Evaluación",
+        texto:
+            "Sesiones con el menor y, si hace falta, pruebas estandarizadas " +
+            "para tener un panorama claro."
+    },
+    {
+        titulo: "Plan de trabajo",
+        texto:
+            "Objetivos concretos y un número estimado de sesiones, explicados " +
+            "sin tecnicismos."
+    },
+    {
+        titulo: "Seguimiento",
+        texto:
+            "Revisión periódica de avances con la familia y ajustes cuando " +
+            "algo no está funcionando."
+    }
+];
+
 module.exports = {
     LICENCIADA,
     PILARES,
     PARTICIPACIONES,
-    ACTIVIDADES
+    ACTIVIDADES,
+    SERVICIOS,
+    PROCESO
 };

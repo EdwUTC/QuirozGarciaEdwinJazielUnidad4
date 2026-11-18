@@ -6,27 +6,178 @@
 
 <main class="flex-grow-1">
 
-    <div class="container mt-5 animate__animated animate__fadeInLeft">
+    <section class="pagina-hero">
 
-        <div class="card shadow-sm p-4 evento-cards">
+        <div class="container">
 
-            <h1 class="text-primary">Contacto</h1>
+            <span class="etiqueta-seccion">Contacto</span>
 
-            <p><strong>Dirección:</strong> Saltillo, Coahuila.</p>
+            <h1>Estamos a un mensaje de distancia</h1>
 
-            <p><strong>Teléfono:</strong> (844) 123-4567</p>
-
-            <p><strong>Correo:</strong> contacto@rayitodesol.com</p>
-
-            <p><strong>Horario:</strong> Lunes a Viernes de 9:00 a 18:00 hrs.</p>
+            <p>
+                Escríbenos o llámanos para resolver dudas, conocer tarifas o
+                agendar la primera entrevista.
+            </p>
 
         </div>
 
-    </div>
+    </section>
+
+    <section class="seccion">
+
+        <div class="container">
+
+            <div class="row g-4">
+
+                <div class="col-md-6 col-lg-3">
+
+                    <div class="dato-contacto">
+
+                        <span class="dato-icono" aria-hidden="true">
+                            <i class="fa-solid fa-location-dot"></i>
+                        </span>
+
+                        <div>
+                            <h2>Dirección</h2>
+                            <p>Saltillo, Coahuila.</p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+
+                    <div class="dato-contacto">
+
+                        <span class="dato-icono" aria-hidden="true">
+                            <i class="fa-solid fa-phone"></i>
+                        </span>
+
+                        <div>
+                            <h2>Teléfono</h2>
+                            <a href="tel:+528441234567">(844) 123-4567</a>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+
+                    <div class="dato-contacto">
+
+                        <span class="dato-icono" aria-hidden="true">
+                            <i class="fa-solid fa-envelope"></i>
+                        </span>
+
+                        <div>
+                            <h2>Correo</h2>
+                            <a href="mailto:contacto@rayitodesol.com">
+                                contacto@rayitodesol.com
+                            </a>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+
+                    <div class="dato-contacto">
+
+                        <span class="dato-icono" aria-hidden="true">
+                            <i class="fa-regular fa-clock"></i>
+                        </span>
+
+                        <div>
+                            <h2>Horario</h2>
+                            <p>Lunes a viernes<br>9:00 a 18:00</p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="row g-4 mt-1 align-items-stretch">
+
+                <div class="col-lg-7">
+
+                    <div class="card border-0 shadow-sm h-100">
+
+                        <div class="card-body p-4">
+
+                            <h2 class="h5 fw-bold mb-2">Cómo llegar</h2>
+
+                            <p class="text-muted mb-3">
+                                Estamos en el centro de Saltillo, con acceso en
+                                transporte público y estacionamiento en la misma
+                                cuadra.
+                            </p>
+
+                            <a
+                                href="https://www.google.com/maps/search/?api=1&query=Saltillo%2C+Coahuila"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="btn btn-outline-primary">
+
+                                <i class="fa-solid fa-map-location-dot me-2" aria-hidden="true"></i>
+                                Ver en Google Maps
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-lg-5">
+
+                    <div class="card border-0 shadow-sm h-100">
+
+                        <div class="card-body p-4">
+
+                            <h2 class="h5 fw-bold mb-2">¿Ya eres paciente?</h2>
+
+                            <p class="text-muted">
+                                Agenda, cambia o cancela tu cita y conversa con la
+                                licenciada desde tu panel.
+                            </p>
+
+                            <div class="d-flex flex-wrap gap-2">
+
+                                <a href="/citas" class="btn btn-primary">Mis citas</a>
+                                <a href="/mensajes" class="btn btn-outline-primary">Mensajes</a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="aviso-contenido mt-4">
+
+                <strong>¿Es una emergencia?</strong> Si hay riesgo para la
+                integridad de alguien, llama al <strong>911</strong>. Este
+                consultorio no atiende urgencias fuera de su horario.
+
+            </div>
+
+        </div>
+
+    </section>
 
 </main>
 
 <%- include('partials/alerts') %>
+
 <%- include('partials/footer') %>
 
 </body>

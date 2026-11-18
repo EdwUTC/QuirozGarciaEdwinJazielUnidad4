@@ -6,63 +6,100 @@
 
 <main class="flex-grow-1">
 
-    <div class="container mt-5 animate__animated animate__fadeInLeft">
+    <div class="container py-5">
 
-        <div class="card p-4 shadow-sm evento-cards">
+        <div class="auth-wrap">
 
-            <h2 class="text-success mb-4">
-                Login
-            </h2>
+            <aside class="auth-panel">
 
-            <form action="/login" method="POST">
+                <span class="etiqueta-seccion">Un Rayito de Sol</span>
 
-                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <h1>Qué bueno verte de nuevo</h1>
 
-                <div class="mb-3">
+                <p>
+                    Entra para revisar tus citas, tu diario de emociones y tus
+                    mensajes con la licenciada.
+                </p>
 
-                    <label class="form-label">
-                        Correo
-                    </label>
+                <ul class="auth-lista">
 
-                    <input
-                        type="email"
-                        name="correo"
-                        class="form-control"
-                        required>
+                    <li>
+                        <i class="fa-solid fa-check" aria-hidden="true"></i>
+                        Agenda y cancela tus citas
+                    </li>
 
-                </div>
+                    <li>
+                        <i class="fa-solid fa-check" aria-hidden="true"></i>
+                        Lleva tu diario de emociones
+                    </li>
 
-                <div class="mb-3">
+                    <li>
+                        <i class="fa-solid fa-check" aria-hidden="true"></i>
+                        Conversa en privado con la licenciada
+                    </li>
 
-                    <label class="form-label">
-                        Contraseña
-                    </label>
+                </ul>
 
-                    <input
-                        type="password"
-                        name="password"
-                        class="form-control"
-                        required>
+            </aside>
 
-                </div>
+            <section class="auth-card">
 
-                <button
-                    type="submit"
-                    class="btn btn-success">
-                    Iniciar Sesión
-                </button>
+                <h2>Iniciar sesión</h2>
 
-                <a href="/" class="btn btn-secondary">
-                    Volver
-                </a>
+                <p class="auth-sub">
+                    Usa el correo con el que te registraste.
+                </p>
 
-                <div class="mt-3">
-                    <a href="/recuperar">
-                        ¿Olvidaste tu contraseña?
-                    </a>
-                </div>
+                <form action="/login" method="POST">
 
-            </form>
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+                    <div class="mb-3">
+
+                        <label for="correo" class="form-label">Correo electrónico</label>
+
+                        <input
+                            type="email"
+                            name="correo"
+                            id="correo"
+                            class="form-control"
+                            autocomplete="email"
+                            required>
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label for="password" class="form-label">Contraseña</label>
+
+                        <input
+                            type="password"
+                            name="password"
+                            id="password"
+                            class="form-control"
+                            autocomplete="current-password"
+                            required>
+
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">
+                        Entrar
+                    </button>
+
+                </form>
+
+                <p class="auth-pie">
+                    <a href="/recuperar">¿Olvidaste tu contraseña?</a>
+                </p>
+
+                <hr>
+
+                <p class="auth-pie mb-0">
+                    ¿Aún no tienes cuenta?
+                    <a href="/registro" class="fw-bold">Regístrate</a>
+                </p>
+
+            </section>
 
         </div>
 
@@ -71,6 +108,7 @@
 </main>
 
 <%- include('partials/alerts') %>
+
 <%- include('partials/footer') %>
 
 </body>

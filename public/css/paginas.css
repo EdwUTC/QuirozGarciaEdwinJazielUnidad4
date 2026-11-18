@@ -1,0 +1,423 @@
+/* =========================================================
+   Un Rayito de Sol - Páginas interiores
+   Nosotros, servicios, especialistas, contacto y acceso.
+   ========================================================= */
+
+/* ---------------- Encabezado de página ---------------- */
+.pagina-hero {
+    padding: 3rem 0 2.6rem;
+    background: linear-gradient(180deg, #eef7ff 0%, #f8fbff 100%);
+    border-bottom: 1px solid #e6eefb;
+}
+
+.pagina-hero h1 {
+    font-size: clamp(1.9rem, 3.4vw, 2.7rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #12303f;
+    margin: 0.6rem 0 0.8rem;
+}
+
+.pagina-hero p {
+    max-width: 62ch;
+    margin-bottom: 0;
+    color: #4a5b6d;
+    line-height: 1.65;
+}
+
+body.dark-mode .pagina-hero {
+    background: linear-gradient(180deg, #1d1d1d 0%, #161616 100%);
+    border-color: #2f2f2f;
+}
+
+body.dark-mode .pagina-hero h1 { color: #ffffff; }
+body.dark-mode .pagina-hero p  { color: #adb5bd; }
+
+/* ---------------- Tarjetas de servicio detalladas ---------------- */
+.tarjeta-detalle {
+    height: 100%;
+    padding: 1.7rem;
+    background: #ffffff;
+    border: 1px solid #e6eefb;
+    border-radius: 22px;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.tarjeta-detalle:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 34px rgba(13, 110, 253, 0.1);
+}
+
+.tarjeta-detalle h2 {
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin: 1rem 0 0.5rem;
+}
+
+.tarjeta-detalle .resumen {
+    color: #5a6b7b;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.detalle-datos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1rem;
+    margin: 0.9rem 0 1rem;
+    font-size: 0.82rem;
+    color: #6c757d;
+}
+
+.detalle-datos span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.detalle-lista {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.detalle-lista li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 0.3rem 0;
+    font-size: 0.9rem;
+    color: #3f5162;
+}
+
+.detalle-lista i {
+    margin-top: 0.25rem;
+    color: #35b58b;
+    font-size: 0.8rem;
+}
+
+body.dark-mode .tarjeta-detalle {
+    background: #262626;
+    border-color: #383838;
+}
+
+body.dark-mode .tarjeta-detalle h2 { color: #ffffff; }
+body.dark-mode .tarjeta-detalle .resumen { color: #b7c1cb; }
+body.dark-mode .detalle-lista li { color: #cfd8e3; }
+body.dark-mode .detalle-datos { color: #9aa5b1; }
+
+/* ---------------- Proceso ---------------- */
+.proceso {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    counter-reset: paso;
+}
+
+.paso-proceso {
+    position: relative;
+    padding: 1.5rem 1.2rem 1.2rem;
+    background: #ffffff;
+    border: 1px solid #e6eefb;
+    border-radius: 18px;
+}
+
+.paso-numero {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    margin-bottom: 0.7rem;
+    background: linear-gradient(135deg, #4facfe, #00c6ff);
+    border-radius: 50%;
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 0.9rem;
+}
+
+.paso-proceso h3 {
+    font-size: 1rem;
+    font-weight: 800;
+    margin-bottom: 0.35rem;
+}
+
+.paso-proceso p {
+    margin: 0;
+    font-size: 0.87rem;
+    line-height: 1.55;
+    color: #5a6b7b;
+}
+
+body.dark-mode .paso-proceso {
+    background: #262626;
+    border-color: #383838;
+}
+
+body.dark-mode .paso-proceso h3 { color: #ffffff; }
+body.dark-mode .paso-proceso p  { color: #b7c1cb; }
+
+/* ---------------- Especialistas ---------------- */
+.tarjeta-especialista {
+    height: 100%;
+    padding: 1.6rem;
+    background: #ffffff;
+    border: 1px solid #e6eefb;
+    border-radius: 22px;
+    text-align: center;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.tarjeta-especialista:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 34px rgba(13, 110, 253, 0.1);
+}
+
+.avatar-especialista {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 76px;
+    height: 76px;
+    margin-bottom: 0.9rem;
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+    border-radius: 50%;
+    color: #ffffff;
+    font-size: 1.6rem;
+    font-weight: 800;
+}
+
+.tarjeta-especialista h2 {
+    font-size: 1.08rem;
+    font-weight: 800;
+    margin-bottom: 0.2rem;
+}
+
+.tarjeta-especialista .especialidad {
+    display: inline-block;
+    margin-bottom: 0.7rem;
+    padding: 0.15rem 0.6rem;
+    background: #e8f2ff;
+    border-radius: 999px;
+    color: #0b5ed7;
+    font-size: 0.75rem;
+    font-weight: 800;
+}
+
+.tarjeta-especialista p {
+    font-size: 0.9rem;
+    line-height: 1.55;
+    color: #5a6b7b;
+}
+
+body.dark-mode .tarjeta-especialista {
+    background: #262626;
+    border-color: #383838;
+}
+
+body.dark-mode .tarjeta-especialista h2 { color: #ffffff; }
+body.dark-mode .tarjeta-especialista p  { color: #b7c1cb; }
+body.dark-mode .tarjeta-especialista .especialidad {
+    background: #12385e;
+    color: #9ecbff;
+}
+
+/* ---------------- Contacto ---------------- */
+.dato-contacto {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.9rem;
+    height: 100%;
+    padding: 1.3rem;
+    background: #ffffff;
+    border: 1px solid #e6eefb;
+    border-radius: 18px;
+}
+
+.dato-icono {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 42px;
+    width: 42px;
+    height: 42px;
+    background: #eef7ff;
+    border-radius: 12px;
+    color: #0d6efd;
+}
+
+.dato-contacto h2,
+.dato-contacto h3 {
+    font-size: 0.98rem;
+    font-weight: 800;
+    margin-bottom: 0.2rem;
+}
+
+.dato-contacto p,
+.dato-contacto a {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #5a6b7b;
+}
+
+.dato-contacto a {
+    color: #0d6efd;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.dato-contacto a:hover { text-decoration: underline; }
+
+body.dark-mode .dato-contacto {
+    background: #262626;
+    border-color: #383838;
+}
+
+body.dark-mode .dato-icono {
+    background: #12385e;
+    color: #9ecbff;
+}
+
+body.dark-mode .dato-contacto h2,
+body.dark-mode .dato-contacto h3 { color: #ffffff; }
+
+body.dark-mode .dato-contacto p { color: #b7c1cb; }
+
+/* ---------------- Acceso (login y registro) ---------------- */
+.auth-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    max-width: 960px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 26px;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(13, 110, 253, 0.12);
+}
+
+.auth-panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 2.6rem;
+    background: linear-gradient(150deg, #0d6efd 0%, #00b4d8 100%);
+    color: #ffffff;
+}
+
+.auth-panel .etiqueta-seccion {
+    align-self: flex-start;
+    background: rgba(255, 255, 255, 0.18);
+    color: #ffffff;
+}
+
+.auth-panel h1 {
+    margin: 0.9rem 0 0.7rem;
+    font-size: 1.9rem;
+    font-weight: 800;
+    line-height: 1.15;
+}
+
+.auth-panel p {
+    color: rgba(255, 255, 255, 0.88);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.auth-lista {
+    list-style: none;
+    padding: 0;
+    margin: 1.2rem 0 0;
+}
+
+.auth-lista li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.55rem;
+    margin-bottom: 0.6rem;
+    font-size: 0.92rem;
+    color: rgba(255, 255, 255, 0.95);
+}
+
+.auth-lista i {
+    margin-top: 0.25rem;
+    color: #ffe082;
+    font-size: 0.8rem;
+}
+
+.auth-card {
+    padding: 2.6rem;
+}
+
+.auth-card h2 {
+    font-size: 1.4rem;
+    font-weight: 800;
+    margin-bottom: 0.3rem;
+}
+
+.auth-card .auth-sub {
+    margin-bottom: 1.6rem;
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.auth-card .form-control {
+    padding: 0.7rem 0.9rem;
+    border-radius: 12px;
+}
+
+.auth-card .btn-primary {
+    padding: 0.7rem;
+    border-radius: 12px;
+    font-weight: 700;
+}
+
+.auth-pie {
+    margin-top: 1.4rem;
+    font-size: 0.88rem;
+    color: #6c757d;
+    text-align: center;
+}
+
+body.dark-mode .auth-wrap {
+    background: #262626;
+    box-shadow: none;
+}
+
+body.dark-mode .auth-card h2 { color: #ffffff; }
+body.dark-mode .auth-card .auth-sub,
+body.dark-mode .auth-pie { color: #adb5bd; }
+
+/* ---------------- Adaptación ---------------- */
+@media (max-width: 991.98px) {
+    .proceso {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 767.98px) {
+    .auth-wrap {
+        grid-template-columns: 1fr;
+    }
+
+    .auth-panel {
+        padding: 1.8rem;
+    }
+
+    .auth-panel h1 {
+        font-size: 1.5rem;
+    }
+
+    .auth-card {
+        padding: 1.8rem;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .proceso {
+        grid-template-columns: 1fr;
+    }
+
+    .pagina-hero {
+        padding: 2rem 0 1.8rem;
+    }
+}
