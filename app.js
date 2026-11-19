@@ -15,6 +15,7 @@ const dashboardRoutes = require("./routes/dashboard");
 const clinicaRoutes = require("./routes/clinica");
 const padresRoutes = require("./routes/padres");
 const mensajesRoutes = require("./routes/mensajes");
+const adminRoutes = require("./routes/admin");
 const apiRoutes = require("./routes/api");
 const publicRoutes = require("./routes/public");
 
@@ -121,6 +122,7 @@ app.use("/", dashboardRoutes);
 app.use("/", clinicaRoutes);
 app.use("/", padresRoutes);
 app.use("/", mensajesRoutes);
+app.use("/admin", adminRoutes);
 
 // API REST propia (JSON). Va antes de las rutas públicas y del 404.
 app.use("/api", limiteApi, apiRoutes);

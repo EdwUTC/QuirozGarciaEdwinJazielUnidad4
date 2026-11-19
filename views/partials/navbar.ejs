@@ -20,37 +20,139 @@
 
             <ul class="navbar-nav me-auto">
 
-                <li class="nav-item">
-                    <a class="nav-link" href="/nosotros">Nosotros</a>
-                </li>
+                <% if (!usuario) { %>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="/servicios">Servicios</a>
-                </li>
+                    <!-- Visitante: recorrido del sitio público -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="/nosotros">Nosotros</a>
+                    </li>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="/especialistas">Especialistas</a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/servicios">Servicios</a>
+                    </li>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="/actividades">Actividades</a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/especialistas">Especialistas</a>
+                    </li>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="/contacto">Contacto</a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/actividades">Actividades</a>
+                    </li>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="/padres">
-                        <i class="fa-solid fa-people-roof me-1" aria-hidden="true"></i>Padres
-                    </a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/contacto">Contacto</a>
+                    </li>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="/rincon">
-                        <i class="fa-solid fa-gamepad me-1" aria-hidden="true"></i>Rincón
-                    </a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/padres">
+                            <i class="fa-solid fa-people-roof me-1" aria-hidden="true"></i>Padres
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/rincon">
+                            <i class="fa-solid fa-gamepad me-1" aria-hidden="true"></i>Rincón
+                        </a>
+                    </li>
+
+                <% } else if (rol === 'administrador') { %>
+
+                    <!-- Administrador: su trabajo es operar el consultorio -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">
+                            <i class="fa-solid fa-gauge-high me-1" aria-hidden="true"></i>Panel
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/usuarios">Usuarios</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/especialistas">Especialistas</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/buzon">Buzón</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/mensajes">Mensajes</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/" title="Ver el sitio público">
+                            <i class="fa-solid fa-arrow-up-right-from-square me-1" aria-hidden="true"></i>Sitio
+                        </a>
+                    </li>
+
+                <% } else if (rol === 'medico') { %>
+
+                    <!-- Médico: agenda y comunicación -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">
+                            <i class="fa-solid fa-calendar-check me-1" aria-hidden="true"></i>Agenda
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/mensajes">
+                            <i class="fa-solid fa-comments me-1" aria-hidden="true"></i>Mensajes
+                        </a>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Sitio
+                        </a>
+
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/servicios">Servicios</a></li>
+                            <li><a class="dropdown-item" href="/especialistas">Especialistas</a></li>
+                            <li><a class="dropdown-item" href="/actividades">Actividades</a></li>
+                            <li><a class="dropdown-item" href="/padres">Guías para padres</a></li>
+                            <li><a class="dropdown-item" href="/rincon">Rincón de Rayito</a></li>
+                        </ul>
+                    </li>
+
+                <% } else { %>
+
+                    <!-- Paciente: su proceso -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">
+                            <i class="fa-solid fa-house me-1" aria-hidden="true"></i>Mi panel
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/citas">Mis citas</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/diario">Diario</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/mensajes">
+                            <i class="fa-solid fa-comments me-1" aria-hidden="true"></i>Mensajes
+                        </a>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Sitio
+                        </a>
+
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/servicios">Servicios</a></li>
+                            <li><a class="dropdown-item" href="/especialistas">Especialistas</a></li>
+                            <li><a class="dropdown-item" href="/actividades">Actividades</a></li>
+                            <li><a class="dropdown-item" href="/padres">Guías para padres</a></li>
+                            <li><a class="dropdown-item" href="/rincon">Rincón de Rayito</a></li>
+                        </ul>
+                    </li>
+
+                <% } %>
 
             </ul>
 

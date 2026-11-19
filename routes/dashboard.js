@@ -31,6 +31,7 @@ router.get("/dashboard", protegerRuta, async (req, res) => {
                               WHERE estado = 'pendiente'
                                 AND fecha >= CURRENT_DATE)::int                             AS pendientes,
                             (SELECT COUNT(*) FROM citas WHERE fecha = CURRENT_DATE)::int    AS hoy,
+                            (SELECT COUNT(*) FROM buzon WHERE leido = false)::int           AS sin_leer,
                             (SELECT COUNT(*) FROM buzon)::int                               AS mensajes`
                 )).rows[0],
                 citas: (await conexion.query(
@@ -154,9 +155,12 @@ router.post("/buzon", protegerRuta, async (req, res) => {
     }
 
     try {
+        const usuarioId = await idUsuario(req);
+
         await conexion.query(
-            `INSERT INTO buzon (nombre, asunto, mensaje) VALUES ($1, $2, $3)`,
-            [req.session.nombre, asunto, mensaje]
+            `INSERT INTO buzon (nombre, asunto, mensaje, usuario_id)
+             VALUES ($1, $2, $3, $4)`,
+            [req.session.nombre, asunto, mensaje, usuarioId]
         );
         req.session.mensaje = { tipo: "success", texto: "Mensaje enviado correctamente" };
     } catch (error) {
