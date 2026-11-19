@@ -28,6 +28,9 @@ CREATE TABLE IF NOT EXISTS usuarios (
 ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS telefono         VARCHAR(30);
 ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS fecha_nacimiento DATE;
 
+-- Una cuenta desactivada no puede iniciar sesión, pero conserva su historial.
+ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS activo BOOLEAN NOT NULL DEFAULT true;
+
 -- ------------------------------------------------------------
 --  Especialistas del consultorio
 -- ------------------------------------------------------------
@@ -185,6 +188,12 @@ CREATE TABLE IF NOT EXISTS buzon (
     mensaje TEXT         NOT NULL,
     fecha   TIMESTAMP    NOT NULL DEFAULT NOW()
 );
+
+-- El buzón lo lee el administrador; el paciente solo escribe.
+ALTER TABLE buzon ADD COLUMN IF NOT EXISTS usuario_id INTEGER REFERENCES usuarios(id) ON DELETE SET NULL;
+ALTER TABLE buzon ADD COLUMN IF NOT EXISTS leido      BOOLEAN NOT NULL DEFAULT false;
+
+CREATE INDEX IF NOT EXISTS idx_buzon_leido ON buzon (leido, fecha DESC);
 
 -- (La tabla "chat" del proyecto original ya no se usa: permitía que
 --  cualquier paciente leyera los mensajes de los demás. Fue sustituida

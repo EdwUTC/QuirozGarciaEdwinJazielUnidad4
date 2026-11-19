@@ -1,0 +1,197 @@
+<%- include('../partials/header', { titulo: 'Especialistas' }) %>
+
+<body class="d-flex flex-column min-vh-100">
+
+<%- include('../partials/navbar') %>
+
+<main class="flex-grow-1">
+
+    <div class="container mt-5">
+
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+
+            <div>
+                <span class="etiqueta-seccion">Administración</span>
+                <h1 class="seccion-titulo mt-2 mb-1">Especialistas</h1>
+                <p class="text-muted mb-0 small">
+                    Lo que edites aquí se refleja en la página pública y en el formulario de citas.
+                </p>
+            </div>
+
+            <a href="/dashboard" class="btn btn-outline-secondary btn-sm">
+                <i class="fa-solid fa-arrow-left me-1" aria-hidden="true"></i>
+                Volver al panel
+            </a>
+
+        </div>
+
+        <div class="row g-4">
+
+            <!-- ---------- Alta / edición ---------- -->
+            <div class="col-lg-4">
+
+                <div class="card shadow-sm">
+
+                    <div class="card-body">
+
+                        <h2 class="h5 fw-bold mb-3">
+                            <%= enEdicion ? 'Editar especialista' : 'Nuevo especialista' %>
+                        </h2>
+
+                        <form
+                            action="<%= enEdicion ? '/admin/especialistas/' + enEdicion.id : '/admin/especialistas' %>"
+                            method="POST">
+
+                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+                            <div class="mb-3">
+                                <label for="nombre" class="form-label">Nombre</label>
+                                <input
+                                    type="text"
+                                    name="nombre"
+                                    id="nombre"
+                                    class="form-control"
+                                    maxlength="120"
+                                    value="<%= enEdicion ? enEdicion.nombre : '' %>"
+                                    required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="especialidad" class="form-label">Especialidad</label>
+                                <input
+                                    type="text"
+                                    name="especialidad"
+                                    id="especialidad"
+                                    class="form-control"
+                                    maxlength="120"
+                                    value="<%= enEdicion ? enEdicion.especialidad : '' %>"
+                                    required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="descripcion" class="form-label">Descripción breve</label>
+                                <textarea
+                                    name="descripcion"
+                                    id="descripcion"
+                                    rows="3"
+                                    class="form-control"
+                                    maxlength="400"><%= enEdicion ? (enEdicion.descripcion || '') : '' %></textarea>
+                            </div>
+
+                            <div class="d-flex gap-2">
+
+                                <button type="submit" class="btn btn-primary flex-grow-1">
+                                    <%= enEdicion ? 'Guardar cambios' : 'Agregar' %>
+                                </button>
+
+                                <% if (enEdicion) { %>
+                                    <a href="/admin/especialistas" class="btn btn-outline-secondary">Cancelar</a>
+                                <% } %>
+
+                            </div>
+
+                        </form>
+
+                        <hr>
+
+                        <p class="text-muted small mb-0">
+                            <i class="fa-solid fa-circle-info me-1" aria-hidden="true"></i>
+                            Un especialista inactivo deja de aparecer en el sitio y no se
+                            puede elegir al agendar, pero conserva sus citas históricas.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- ---------- Lista ---------- -->
+            <div class="col-lg-8">
+
+                <div class="card shadow-sm">
+
+                    <div class="card-body">
+
+                        <h2 class="h5 fw-bold mb-3">
+                            Catálogo
+                            <span class="text-muted fw-normal small">(<%= especialistas.length %>)</span>
+                        </h2>
+
+                        <div class="table-responsive">
+
+                            <table class="table align-middle tabla-citas mb-0">
+
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Especialista</th>
+                                        <th scope="col">Estado</th>
+                                        <th scope="col" class="text-end">Acciones</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+
+                                    <% especialistas.forEach(function (e) { %>
+
+                                        <tr class="<%= e.activo ? '' : 'opacity-75' %>">
+
+                                            <td>
+                                                <span class="fw-bold d-block"><%= e.nombre %></span>
+                                                <span class="text-muted small"><%= e.especialidad %></span>
+                                                <% if (e.descripcion) { %>
+                                                    <span class="text-muted small d-block"><%= e.descripcion %></span>
+                                                <% } %>
+                                            </td>
+
+                                            <td>
+                                                <span class="badge badge-estado <%= e.activo ? 'badge-atendida' : 'badge-cancelada' %>">
+                                                    <%= e.activo ? 'activo' : 'inactivo' %>
+                                                </span>
+                                            </td>
+
+                                            <td class="text-end text-nowrap">
+
+                                                <a href="/admin/especialistas?editar=<%= e.id %>" class="btn btn-sm btn-outline-primary">
+                                                    Editar
+                                                </a>
+
+                                                <form action="/admin/especialistas/<%= e.id %>/estado" method="POST" class="d-inline">
+                                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                                    <button
+                                                        type="submit"
+                                                        class="btn btn-sm <%= e.activo ? 'btn-outline-danger' : 'btn-outline-success' %>">
+                                                        <%= e.activo ? 'Desactivar' : 'Activar' %>
+                                                    </button>
+                                                </form>
+
+                                            </td>
+
+                                        </tr>
+
+                                    <% }); %>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+<%- include('../partials/alerts') %>
+
+<%- include('../partials/footer') %>
+
+</body>
+</html>

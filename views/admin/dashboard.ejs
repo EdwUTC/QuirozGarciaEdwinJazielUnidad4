@@ -15,15 +15,28 @@
                 <p class="text-muted mb-0"><%= nombre %> · <%= correo %></p>
             </div>
 
-            <div class="d-flex gap-2">
+            <div class="d-flex flex-wrap gap-2">
 
-                <a href="/buzon" class="btn btn-outline-primary">
-                    <i class="fa-solid fa-envelope me-2" aria-hidden="true"></i>
-                    Buzón
+                <a href="/admin/usuarios" class="btn btn-outline-primary btn-sm">
+                    <i class="fa-solid fa-users-gear me-1" aria-hidden="true"></i>
+                    Usuarios
                 </a>
 
-                <a href="/mensajes" class="btn btn-outline-primary">
-                    <i class="fa-solid fa-comments me-2" aria-hidden="true"></i>
+                <a href="/admin/especialistas" class="btn btn-outline-primary btn-sm">
+                    <i class="fa-solid fa-user-doctor me-1" aria-hidden="true"></i>
+                    Especialistas
+                </a>
+
+                <a href="/admin/buzon" class="btn btn-outline-primary btn-sm">
+                    <i class="fa-solid fa-envelope me-1" aria-hidden="true"></i>
+                    Buzón
+                    <% if (stats.sin_leer > 0) { %>
+                        <span class="badge bg-danger ms-1"><%= stats.sin_leer %></span>
+                    <% } %>
+                </a>
+
+                <a href="/mensajes" class="btn btn-outline-primary btn-sm">
+                    <i class="fa-solid fa-comments me-1" aria-hidden="true"></i>
                     Mensajes
                 </a>
 
@@ -68,8 +81,11 @@
                 <div class="card shadow-sm h-100 tarjeta-resumen">
                     <div class="card-body">
                         <span class="resumen-icono" aria-hidden="true">📨</span>
-                        <h6 class="text-muted mb-1">Mensajes</h6>
+                        <h6 class="text-muted mb-1">Buzón</h6>
                         <h3 class="mb-0"><%= stats.mensajes %></h3>
+                        <p class="text-muted small mb-0">
+                            <%= stats.sin_leer %> sin leer
+                        </p>
                     </div>
                 </div>
             </div>

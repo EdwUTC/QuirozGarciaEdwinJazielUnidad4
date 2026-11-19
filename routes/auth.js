@@ -39,6 +39,13 @@ async function tokenValido(token) {
 
 // ---------------- Login ----------------
 router.get("/login", (req, res) => {
+    if (req.query.desactivada === "1") {
+        res.locals.mensaje = {
+            tipo: "warning",
+            texto: "Tu cuenta fue desactivada. Contacta al consultorio."
+        };
+    }
+
     res.render("login");
 });
 
@@ -69,6 +76,13 @@ router.post("/login", limiteLogin, async (req, res) => {
 
         if (!acceso) {
             return loginFallido(res, "Usuario o contraseña incorrectos");
+        }
+
+        // Una cuenta desactivada no entra, aunque la contraseña sea correcta.
+        // Se comprueba después de validar la contraseña para no revelar
+        // el estado de una cuenta a quien no la conoce.
+        if (usuario.activo === false) {
+            return loginFallido(res, "Tu cuenta está desactivada. Contacta al consultorio.");
         }
 
         // Regenerar la sesión evita ataques de fijación de sesión
