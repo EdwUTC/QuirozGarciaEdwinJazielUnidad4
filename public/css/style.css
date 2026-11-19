@@ -85,13 +85,24 @@ p, a, span {
     width: 100%;
 }
 
-form.d-flex .form-control {
+.navbar form[action="/buscar"] {
+    min-width: 0;
+}
+
+.navbar form[action="/buscar"] .form-control {
+    flex: 1 1 auto;
+    min-width: 0;
+    width: auto;
     border-radius: 20px;
     border: none;
     padding: 8px 12px;
 }
 
-form.d-flex .form-control:focus {
+.navbar form[action="/buscar"] .btn {
+    flex: 0 0 auto;
+}
+
+.navbar form[action="/buscar"] .form-control:focus {
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
     outline: none;
 }
@@ -113,12 +124,12 @@ form.d-flex .form-control:focus {
     white-space: nowrap;
 }
 
-form.d-flex .btn {
+.navbar form[action="/buscar"] .btn {
     border-radius: 20px;
     transition: 0.3s;
 }
 
-form.d-flex .btn:hover {
+.navbar form[action="/buscar"] .btn:hover {
     transform: scale(1.05);
 }
 
