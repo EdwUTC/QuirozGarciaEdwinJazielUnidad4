@@ -1,0 +1,37 @@
+# ============================================================
+#  Opción "todo en una máquina": nginx balancea entre dos
+#  instancias de la aplicación.
+#
+#  Si usas el balanceador del proveedor (DigitalOcean, Azure…),
+#  no necesitas nginx: levanta solo el servicio `app` en cada VM
+#  y apunta el balanceador al puerto 3000.
+# ============================================================
+services:
+  app1:
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      PORT: 3000
+    expose:
+      - "3000"
+
+  app2:
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      PORT: 3000
+    expose:
+      - "3000"
+
+  nginx:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    depends_on:
+      - app1
+      - app2
+    ports:
+      - "80:80"
+    volumes:
+      - ./deploy/nginx.conf:/etc/nginx/conf.d/default.conf:ro
