@@ -17,6 +17,7 @@
 // La autenticación usa la misma sesión que la web y los POST/PATCH
 // exigen el token CSRF en la cabecera `x-csrf-token`.
 const express = require("express");
+const os = require("os");
 
 const router = express.Router();
 const conexion = require("../database/conexion");
@@ -68,6 +69,8 @@ router.get("/estado", async (req, res) => {
         ok: true,
         servicio: "consultorio-rayito-de-sol",
         version: VERSION,
+        // Permite comprobar el balanceo: cada instancia se identifica.
+        instancia: process.env.INSTANCE_ID || os.hostname(),
         base_datos: baseDatos,
         hora: new Date().toISOString()
     });

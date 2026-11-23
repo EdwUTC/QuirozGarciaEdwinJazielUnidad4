@@ -13,6 +13,7 @@ services:
     env_file: .env
     environment:
       PORT: 3000
+      INSTANCE_ID: app-1
     expose:
       - "3000"
 
@@ -22,6 +23,7 @@ services:
     env_file: .env
     environment:
       PORT: 3000
+      INSTANCE_ID: app-2
     expose:
       - "3000"
 
