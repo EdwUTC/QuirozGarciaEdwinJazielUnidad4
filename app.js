@@ -3,6 +3,7 @@ require("dotenv").config();
 const path = require("path");
 const express = require("express");
 const session = require("express-session");
+const PgSession = require("connect-pg-simple")(session);
 const helmet = require("helmet");
 
 const conexion = require("./database/conexion");
@@ -22,9 +23,10 @@ const publicRoutes = require("./routes/public");
 const app = express();
 const PUERTO = Number(process.env.PORT) || 3000;
 
-// Express debe confiar en el proxy inverso (ngrok) para conocer el
+// Express debe confiar en el proxy inverso para conocer el
 // protocolo (https) y la IP reales del cliente.
-app.set("trust proxy", 1);
+// Detrás de un balanceador + nginx hacen falta 2 saltos: TRUST_PROXY=2.
+app.set("trust proxy", Number(process.env.TRUST_PROXY) || 1);
 
 // Cabeceras de seguridad. La CSP permite los CDN que usa el front
 // (Bootstrap, Font Awesome, SweetAlert2, Google Fonts y reCAPTCHA).
@@ -82,6 +84,14 @@ if (!process.env.SESSION_SECRET) {
 
 app.use(
     session({
+        // Las sesiones se guardan en PostgreSQL y no en memoria: así
+        // sobreviven a un reinicio y funcionan con varias instancias
+        // detrás de un balanceador.
+        store: new PgSession({
+            pool: conexion,
+            tableName: "sesiones",
+            createTableIfMissing: true
+        }),
         name: "rayito.sid",
         secret: process.env.SESSION_SECRET || "cambia-este-secreto-en-produccion",
         resave: false,
@@ -89,7 +99,7 @@ app.use(
         cookie: {
             httpOnly: true,
             sameSite: "lax",
-            // "auto": cookie segura en https (ngrok/producción) y normal en http local.
+            // "auto": cookie segura en https (producción/ngrok) y normal en http local.
             secure: "auto",
             maxAge: 2 * 60 * 60 * 1000
         }
