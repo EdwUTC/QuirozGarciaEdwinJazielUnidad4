@@ -7,7 +7,10 @@
 #    2. New → Blueprint.
 #    3. Elige el repositorio QuirozGarciaEdwinJazielUnidad4.
 #    4. Render lee este archivo y pide los valores marcados
-#       con `sync: false` (los de la base de datos).
+#       con `sync: false`.
+#
+#  La base de datos se toma de DATABASE_URL (la entrega Neon).
+#  La aplicación prefiere esa variable sobre las DB_* sueltas.
 # ============================================================
 
 services:
@@ -16,7 +19,7 @@ services:
     runtime: node
     plan: free
     region: oregon
-    buildCommand: npm ci
+    buildCommand: npm ci && npm run build
     startCommand: node app.js
     healthCheckPath: /api/estado
     envVars:
@@ -26,19 +29,9 @@ services:
         value: app-1
       - key: TRUST_PROXY
         value: "2"
-      - key: DB_SSL
-        value: "true"
       - key: SESSION_SECRET
         generateValue: true
-      - key: DB_HOST
-        sync: false
-      - key: DB_PUERTO
-        sync: false
-      - key: DB_NOMBRE
-        sync: false
-      - key: DB_USUARIO
-        sync: false
-      - key: DB_PASSWORD
+      - key: DATABASE_URL
         sync: false
       - key: RECAPTCHA_SITE_KEY
         sync: false
@@ -50,7 +43,7 @@ services:
     runtime: node
     plan: free
     region: oregon
-    buildCommand: npm ci
+    buildCommand: npm ci && npm run build
     startCommand: node app.js
     healthCheckPath: /api/estado
     envVars:
@@ -60,19 +53,9 @@ services:
         value: app-2
       - key: TRUST_PROXY
         value: "2"
-      - key: DB_SSL
-        value: "true"
       - key: SESSION_SECRET
         generateValue: true
-      - key: DB_HOST
-        sync: false
-      - key: DB_PUERTO
-        sync: false
-      - key: DB_NOMBRE
-        sync: false
-      - key: DB_USUARIO
-        sync: false
-      - key: DB_PASSWORD
+      - key: DATABASE_URL
         sync: false
       - key: RECAPTCHA_SITE_KEY
         sync: false
