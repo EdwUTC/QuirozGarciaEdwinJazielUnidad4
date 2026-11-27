@@ -51,7 +51,17 @@ atiende al mismo usuario.
 1. Entrar a <https://render.com> con GitHub.
 2. **New → Blueprint** y elegir el repositorio.
 3. Render lee `render.yaml` y crea **rayito-app-1** y **rayito-app-2**.
-4. Completar las variables que pide (las de la base de datos y reCAPTCHA).
+4. Completar las variables que pide:
+
+   | Variable | Valor |
+   |---|---|
+   | `DATABASE_URL` | la cadena de conexión de Neon |
+   | `RECAPTCHA_SITE_KEY` | clave pública del captcha |
+   | `RECAPTCHA_SECRET_KEY` | clave secreta del captcha |
+
+   `SESSION_SECRET` lo genera Render, y `INSTANCE_ID`, `NODE_ENV` y
+   `TRUST_PROXY` vienen definidos en el archivo.
+
 5. Esperar el primer despliegue y comprobar:
 
    ```bash
