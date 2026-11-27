@@ -1,0 +1,23 @@
+# Configuración del balanceador para Wrangler.
+#
+#   npx wrangler login
+#   npx wrangler deploy
+#
+# El Worker queda publicado en https://rayito-balanceador.<subdominio>.workers.dev
+# con certificado de Cloudflare.
+
+name = "rayito-balanceador"
+main = "cloudflare-worker.mjs"
+compatibility_date = "2026-11-27"
+
+[vars]
+ORIGEN_1 = "https://rayito-app-1.onrender.com"
+ORIGEN_2 = "https://rayito-app-2.onrender.com"
+
+# Mantiene despiertas las instancias solo en la franja de clase.
+# 14:00-23:59 y 00:00-01:59 UTC = 08:00-19:59 en México (UTC-6).
+# Dos servicios durante 12 h al día consumen ~730 de las 750 horas
+# mensuales que da Render; encendidos 24/7 consumirían 1460 y Render
+# suspendería ambos a mitad de mes.
+[triggers]
+crons = ["*/10 0-1,14-23 * * *"]

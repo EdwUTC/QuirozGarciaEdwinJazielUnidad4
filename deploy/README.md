@@ -71,23 +71,56 @@ atiende al mismo usuario.
 
    Cada una debe devolver un `"instancia"` distinto: `app-1` y `app-2`.
 
-## 3. Dominio (Namecheap + Cloudflare)
+## 3. Balanceador (Cloudflare)
 
-1. Reclamar el dominio `.me` en <https://education.github.com/pack> → Namecheap.
-2. Crear cuenta en <https://cloudflare.com> y agregar el dominio.
-3. Copiar los *nameservers* que da Cloudflare en Namecheap.
-4. En Cloudflare, crear el Worker con el contenido de
-   `deploy/cloudflare-worker.mjs` y definir sus variables:
+El Worker reparte las peticiones entre las dos instancias. Se publica con
+Wrangler, sin copiar código en el panel:
 
-   | Variable | Valor |
-   |---|---|
-   | `ORIGEN_1` | `https://rayito-app-1.onrender.com` |
-   | `ORIGEN_2` | `https://rayito-app-2.onrender.com` |
-   | `SITIO` | `rayitodesol.me` |
+```bash
+npx wrangler login
+npx wrangler deploy --config deploy/wrangler.toml
+```
 
-5. Asociar el Worker a la ruta `rayitodesol.me/*`.
-6. Añadir un *Cron Trigger* cada 10 minutos para que las instancias no se
-   duerman (plan gratuito de Render).
+Queda en `https://rayito-balanceador.<subdominio>.workers.dev`, con
+certificado de Cloudflare. No requiere tarjeta.
+
+### Opción A: sin dominio propio
+
+Es la vía usada en esta entrega. El `workers.dev` es un nombre DNS real de
+Cloudflare, con HTTPS válido y balanceo auténtico. Sus variables son las de
+`deploy/wrangler.toml`:
+
+| Variable | Valor |
+|---|---|
+| `ORIGEN_1` | `https://rayito-app-1.onrender.com` |
+| `ORIGEN_2` | `https://rayito-app-2.onrender.com` |
+
+`SITIO` se omite: el Worker usa el host de la petición.
+
+### Opción B: con dominio propio (opcional)
+
+Si más adelante se consigue un dominio:
+
+1. Reclamarlo en <https://education.github.com/pack> (Namecheap `.me`).
+2. Agregarlo en Cloudflare y copiar los *nameservers* en el registrador.
+3. En **DNS**, crear un `AAAA` con nombre `@` y contenido `100::`, con el
+   proxy activado: es un registro de relleno que el Worker intercepta.
+4. En el Worker: **Settings → Domains & Routes → Add → Route**, ruta
+   `tudominio.me/*`.
+5. Definir `SITIO` con el dominio, sin `https://`.
+
+### Horas de Render
+
+Render regala **750 horas de instancia al mes**. Dos servicios encendidos
+24/7 consumen ~1460 h y Render **suspende ambos** a mitad de mes. Por eso el
+cron del Worker solo corre de 08:00 a 19:59 (hora de México):
+
+```
+*/10 0-1,14-23 * * *
+```
+
+Son ~730 h mensuales. Fuera de esa franja las instancias se duermen y la
+primera visita tarda cerca de un minuto en despertarlas.
 
 ---
 
@@ -95,11 +128,11 @@ atiende al mismo usuario.
 
 | Prueba | Comando o criterio |
 |---|---|
-| Aplicación responde | `curl -I https://rayitodesol.me/` → 200 |
-| API viva | `curl https://rayitodesol.me/api/estado` → `"ok": true` |
+| Aplicación responde | `curl -I https://<host>/` → 200 |
+| API viva | `curl https://<host>/api/estado` → `"ok": true` |
 | HTTPS | candado válido, sin advertencias |
-| Dominio | `nslookup rayitodesol.me` apunta a Cloudflare |
-| **Balanceo** | `for i in 1 2 3 4; do curl -s https://rayitodesol.me/api/estado; done` alterna `app-1` y `app-2` |
+| Dominio | `nslookup <host>` resuelve a Cloudflare |
+| **Balanceo** | repetir `curl -s https://<host>/api/estado` alterna `app-1` y `app-2` |
 | Resistencia | borrar una instancia en Render y comprobar que el sitio sigue |
 | Sesión compartida | iniciar sesión y navegar: no se pierde entre instancias |
 | Base de datos | registro, login y citas funcionando |
