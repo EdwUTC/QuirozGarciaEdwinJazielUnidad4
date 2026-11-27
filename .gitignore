@@ -10,3 +10,4 @@ node_modules/
 # Archivos temporales
 .DS_Store
 Thumbs.db
+.neon
