@@ -2,16 +2,23 @@
 #  Blueprint de Render: crea las dos instancias de la
 #  aplicación con una sola operación.
 #
-#  Cómo usarlo:
-#    1. Entra a render.com con tu cuenta de GitHub.
-#    2. New → Blueprint.
-#    3. Elige el repositorio QuirozGarciaEdwinJazielUnidad4.
-#    4. Render lee este archivo y pide los valores marcados
-#       con `sync: false`.
+#  Los secretos compartidos viven en un grupo de variables
+#  (DATABASE_URL y las llaves del captcha): se capturan una
+#  sola vez y ambos servicios los heredan.
 #
-#  La base de datos se toma de DATABASE_URL (la entrega Neon).
-#  La aplicación prefiere esa variable sobre las DB_* sueltas.
+#  SESSION_SECRET no va en el grupo: cada instancia tiene el
+#  suyo, generado por Render.
 # ============================================================
+
+envVarGroups:
+  - name: rayito-secretos
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: RECAPTCHA_SITE_KEY
+        sync: false
+      - key: RECAPTCHA_SECRET_KEY
+        sync: false
 
 services:
   - type: web
@@ -23,6 +30,7 @@ services:
     startCommand: node app.js
     healthCheckPath: /api/estado
     envVars:
+      - fromGroup: rayito-secretos
       - key: NODE_ENV
         value: production
       - key: INSTANCE_ID
@@ -31,12 +39,6 @@ services:
         value: "2"
       - key: SESSION_SECRET
         generateValue: true
-      - key: DATABASE_URL
-        sync: false
-      - key: RECAPTCHA_SITE_KEY
-        sync: false
-      - key: RECAPTCHA_SECRET_KEY
-        sync: false
 
   - type: web
     name: rayito-app-2
@@ -47,6 +49,7 @@ services:
     startCommand: node app.js
     healthCheckPath: /api/estado
     envVars:
+      - fromGroup: rayito-secretos
       - key: NODE_ENV
         value: production
       - key: INSTANCE_ID
@@ -55,9 +58,3 @@ services:
         value: "2"
       - key: SESSION_SECRET
         generateValue: true
-      - key: DATABASE_URL
-        sync: false
-      - key: RECAPTCHA_SITE_KEY
-        sync: false
-      - key: RECAPTCHA_SECRET_KEY
-        sync: false
