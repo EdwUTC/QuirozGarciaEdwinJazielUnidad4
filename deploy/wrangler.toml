@@ -3,7 +3,8 @@
 #   npx wrangler login
 #   npx wrangler deploy
 #
-# El Worker queda publicado en https://rayito-balanceador.<subdominio>.workers.dev
+# Publicado en:
+#   https://rayito-balanceador.rayito-de-sol-u4.workers.dev
 # con certificado de Cloudflare.
 
 name = "rayito-balanceador"
