@@ -6,11 +6,13 @@
 // - Si una responde con error 5xx o no responde, prueba la otra.
 // - Un cron cada 10 minutos las mantiene despiertas, porque el plan
 //   gratuito de Render suspende el servicio tras 15 minutos sin uso.
+//   Solo se ejecuta en la franja de clase: Render da 750 horas de
+//   instancia al mes y dos servicios encendidos 24/7 consumirían 1460.
 //
 // Variables de entorno del Worker:
 //   ORIGEN_1 = https://rayito-app-1.onrender.com
 //   ORIGEN_2 = https://rayito-app-2.onrender.com
-//   SITIO    = rayitodesol.me
+//   SITIO    = rayitodesol.me   (opcional; si falta se usa el host pedido)
 
 let turno = 0;
 
