@@ -3,11 +3,12 @@
 #  aplicación con una sola operación.
 #
 #  Los secretos compartidos viven en un grupo de variables
-#  (DATABASE_URL y las llaves del captcha): se capturan una
-#  sola vez y ambos servicios los heredan.
+#  (DATABASE_URL, llaves del captcha y SESSION_SECRET): se
+#  capturan una sola vez y ambos servicios los heredan.
 #
-#  SESSION_SECRET no va en el grupo: cada instancia tiene el
-#  suyo, generado por Render.
+#  SESSION_SECRET debe ser el mismo en las dos instancias: con
+#  secretos distintos, la cookie firmada por una no la puede
+#  validar la otra y el usuario pierde la sesión.
 # ============================================================
 
 envVarGroups:
