@@ -53,8 +53,17 @@ async function reenviar(peticion, origen, sitio) {
 
 export default {
     async fetch(peticion, env) {
+        const url = new URL(peticion.url);
+
+        // El sitio no debe servirse en claro: se fuerza HTTPS antes de
+        // reenviar nada a las instancias.
+        if (url.protocol === "http:") {
+            url.protocol = "https:";
+            return Response.redirect(url.toString(), 301);
+        }
+
         const lista = origenes(env);
-        const sitio = env.SITIO || new URL(peticion.url).hostname;
+        const sitio = env.SITIO || url.hostname;
 
         for (let intento = 0; intento < lista.length; intento++) {
             const indice = (turno + intento) % lista.length;
