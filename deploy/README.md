@@ -1,160 +1,105 @@
 # Despliegue en la nube — Unidad 4
 
-Infraestructura para publicar el consultorio con los cinco puntos que pide
-la rúbrica: servidor de aplicaciones, servidor de base de datos, balanceo
-de cargas, dominio y certificados.
+Stack 100 % gratuito y **sin tarjeta de crédito**, elegido porque el acceso a
+Azure de la cuenta institucional está bloqueado y el pack de GitHub ya no
+incluye DigitalOcean.
 
 ---
 
 ## Arquitectura
 
 ```
-                    Internet
-                        │
-              dominio (DNS) ──────────────┐
-                        │                 │
-            ┌───────────┴───────────┐     │
-            │   Balanceador de carga │    │  TLS termina aquí
-            └───────────┬───────────┘     │
-                        │                 │
-          ┌─────────────┴─────────────┐   │
-          │                           │   │
-    [ VM app-1 ]                [ VM app-2 ]
-    Node + Docker               Node + Docker
-          │                           │
-          └─────────────┬─────────────┘
-                        │
-            [ PostgreSQL gestionado ]
+                    rayitodesol.me
+                          │
+        Cloudflare (DNS + HTTPS + balanceador)
+                          │
+          ┌───────────────┴───────────────┐
+   rayito-app-1                    rayito-app-2
+   (Render, free)                  (Render, free)
+          └───────────────┬───────────────┘
+                          │
+                    Neon (PostgreSQL)
 ```
 
-Las sesiones viven en PostgreSQL, así que **cualquiera de las dos
-instancias puede atender al mismo usuario**.
+| Requisito de la unidad | Servicio |
+|---|---|
+| Servidor de aplicaciones | 2 Web Services de Render |
+| Servidor de base de datos | Neon (PostgreSQL gestionado) |
+| Balanceo de cargas | Cloudflare Worker (`deploy/cloudflare-worker.js`) |
+| Configuración de dominio | Namecheap `.me` + DNS en Cloudflare |
+| Certificados de seguridad | HTTPS automático de Cloudflare y Render |
+
+Las sesiones viven en PostgreSQL, así que cualquiera de las dos instancias
+atiende al mismo usuario.
 
 ---
 
-## Requisitos
+## 1. Base de datos (Neon)
 
-- Una cuenta en un proveedor con crédito (DigitalOcean vía GitHub Student
-  Pack, Azure for Students, etc.).
-- Un dominio o subdominio (DuckDNS sirve y es gratis).
-- El repositorio del proyecto accesible desde la VM.
-
----
-
-## Opción A — Dos máquinas + balanceador del proveedor (recomendada)
-
-1. **Crear la base de datos gestionada** (PostgreSQL 16).
-   Anota host, puerto, usuario, contraseña y nombre.
-
-2. **Cargar el esquema** desde tu equipo o desde la VM:
+1. Crear cuenta en <https://neon.tech> (se puede con GitHub).
+2. Crear un proyecto; anotar la cadena de conexión.
+3. Cargar el esquema:
 
    ```bash
-   psql "host=$DB_HOST port=25060 dbname=$DB_NOMBRE user=$DB_USUARIO sslmode=require" \
-        -f schema.sql
+   psql "postgresql://USUARIO:PASSWORD@HOST/DB?sslmode=require" -f schema.sql
    ```
 
-3. **Crear dos Droplets** (Ubuntu 24.04, 1 GB) con Docker instalado:
+4. Guardar estos valores para Render: host, puerto, base, usuario, contraseña.
+
+## 2. Aplicación (Render)
+
+1. Entrar a <https://render.com> con GitHub.
+2. **New → Blueprint** y elegir el repositorio.
+3. Render lee `render.yaml` y crea **rayito-app-1** y **rayito-app-2**.
+4. Completar las variables que pide (las de la base de datos y reCAPTCHA).
+5. Esperar el primer despliegue y comprobar:
 
    ```bash
-   curl -fsSL https://get.docker.com | sh
+   curl https://rayito-app-1.onrender.com/api/estado
+   curl https://rayito-app-2.onrender.com/api/estado
    ```
 
-4. **Clonar y configurar en cada VM**:
+   Cada una debe devolver un `"instancia"` distinto: `app-1` y `app-2`.
 
-   ```bash
-   git clone https://github.com/EdwinQ12/QuirozGarciaEdwinJazielUnidad4.git
-   cd QuirozGarciaEdwinJazielUnidad4
-   cp .env.example .env
-   nano .env          # DB_*, DB_SSL=true, SESSION_SECRET
-   ```
+## 3. Dominio (Namecheap + Cloudflare)
 
-5. **Levantar la aplicación**:
+1. Reclamar el dominio `.me` en <https://education.github.com/pack> → Namecheap.
+2. Crear cuenta en <https://cloudflare.com> y agregar el dominio.
+3. Copiar los *nameservers* que da Cloudflare en Namecheap.
+4. En Cloudflare, crear el Worker con el contenido de
+   `deploy/cloudflare-worker.js` y definir sus variables:
 
-   ```bash
-   docker build -t rayito .
-   docker run -d --restart=unless-stopped --name rayito \
-     --env-file .env -p 3000:3000 rayito
-   ```
+   | Variable | Valor |
+   |---|---|
+   | `ORIGEN_1` | `https://rayito-app-1.onrender.com` |
+   | `ORIGEN_2` | `https://rayito-app-2.onrender.com` |
+   | `SITIO` | `rayitodesol.me` |
 
-6. **Crear el Load Balancer** apuntando a los dos Droplets al puerto
-   `3000`, con *health check* HTTP en `/api/estado`.
-
-7. **Certificado**: el balanceador de DigitalOcean emite Let's Encrypt
-   automáticamente al asociar el dominio.
-
-8. **Dominio**: crear un registro `A` (o `CNAME`) hacia la IP del
-   balanceador.
-
----
-
-## Opción B — Una sola máquina con nginx
-
-Útil si no hay balanceador del proveedor. nginx reparte entre dos
-contenedores de la misma VM.
-
-```bash
-git clone https://github.com/EdwinQ12/QuirozGarciaEdwinJazielUnidad4.git
-cd QuirozGarciaEdwinJazielUnidad4
-cp .env.example .env && nano .env
-docker compose up -d --build
-```
-
-- La app queda en `http://IP_DEL_SERVIDOR`.
-- El balanceo está en `deploy/nginx.conf` (round-robin con `max_fails`).
-- Para HTTPS en la propia VM: `certbot --nginx -d tu-dominio` y cambiar
-  el `listen 80` por `443 ssl` en la configuración.
-
----
-
-## Variables de entorno en producción
-
-| Variable | Ejemplo | Nota |
-|---|---|---|
-| `NODE_ENV` | `production` | Oculta logs sensibles |
-| `PORT` | `3000` | |
-| `SESSION_SECRET` | cadena de 96 caracteres | **Obligatoria** |
-| `DB_HOST` | `db-postgresql-...` | |
-| `DB_PUERTO` | `25060` | |
-| `DB_NOMBRE` | `defaultdb` | |
-| `DB_USUARIO` | `doadmin` | |
-| `DB_PASSWORD` | — | |
-| `DB_SSL` | `true` | Necesario en bases gestionadas |
-| `TRUST_PROXY` | `1` | `2` si hay dos proxies delante |
-| `RECAPTCHA_SITE_KEY` | — | |
-| `RECAPTCHA_SECRET_KEY` | — | |
-
-Genera el secreto con:
-
-```bash
-node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"
-```
+5. Asociar el Worker a la ruta `rayitodesol.me/*`.
+6. Añadir un *Cron Trigger* cada 10 minutos para que las instancias no se
+   duerman (plan gratuito de Render).
 
 ---
 
 ## Pruebas de liberación
 
-Antes de entregar, comprobar desde el dominio público:
-
-| Prueba | Cómo |
+| Prueba | Comando o criterio |
 |---|---|
-| Aplicación responde | `curl -I https://tu-dominio/` → 200 |
-| API viva | `curl https://tu-dominio/api/estado` → `"ok": true` |
-| HTTPS válido | candado en el navegador, sin advertencias |
-| Redirección de HTTP | `curl -I http://tu-dominio/` → 301 a https |
-| Sesión persistente | iniciar sesión, reiniciar una instancia y seguir dentro |
-| Balanceo | `for i in 1 2 3 4; do curl -s https://tu-dominio/api/estado; done` |
-| Base de datos | registro y login funcionando |
-| Captcha | registro con el widget resuelto |
+| Aplicación responde | `curl -I https://rayitodesol.me/` → 200 |
+| API viva | `curl https://rayitodesol.me/api/estado` → `"ok": true` |
+| HTTPS | candado válido, sin advertencias |
+| Dominio | `nslookup rayitodesol.me` apunta a Cloudflare |
+| **Balanceo** | `for i in 1 2 3 4; do curl -s https://rayitodesol.me/api/estado; done` alterna `app-1` y `app-2` |
+| Resistencia | borrar una instancia en Render y comprobar que el sitio sigue |
+| Sesión compartida | iniciar sesión y navegar: no se pierde entre instancias |
+| Base de datos | registro, login y citas funcionando |
 
 ---
 
-## Apagar todo al terminar
+## Limitaciones del plan gratuito
 
-El crédito se consume mientras los recursos existen:
-
-```bash
-docker compose down        # Opción B
-```
-
-Y en el panel del proveedor: destruir Droplets, base de datos y
-balanceador.
+- Render suspende las instancias tras 15 minutos sin tráfico; el cron del
+  Worker las mantiene activas durante la evaluación.
+- Neon limita el almacenamiento; suficiente para la demostración.
+- El balanceo es a nivel de aplicación (Worker), no un balanceador de red
+  dedicado. Se documenta así en el informe.

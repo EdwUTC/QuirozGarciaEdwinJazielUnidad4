@@ -1,0 +1,80 @@
+// deploy/cloudflare-worker.js
+//
+// Balanceador de carga en el borde de Cloudflare.
+//
+// - Reparte las peticiones entre las dos instancias de Render.
+// - Si una responde con error 5xx o no responde, prueba la otra.
+// - Un cron cada 10 minutos las mantiene despiertas, porque el plan
+//   gratuito de Render suspende el servicio tras 15 minutos sin uso.
+//
+// Variables de entorno del Worker:
+//   ORIGEN_1 = https://rayito-app-1.onrender.com
+//   ORIGEN_2 = https://rayito-app-2.onrender.com
+//   SITIO    = rayitodesol.me
+
+let turno = 0;
+
+function origenes(env) {
+    return [env.ORIGEN_1, env.ORIGEN_2].filter(Boolean);
+}
+
+async function reenviar(peticion, origen, sitio) {
+    const url = new URL(peticion.url);
+    const destino = new URL(url.pathname + url.search, origen);
+
+    const cabeceras = new Headers(peticion.headers);
+    cabeceras.set("X-Forwarded-Host", sitio);
+    cabeceras.set("X-Forwarded-Proto", "https");
+
+    const opciones = {
+        method: peticion.method,
+        headers: cabeceras,
+        redirect: "manual"
+    };
+
+    if (peticion.method !== "GET" && peticion.method !== "HEAD") {
+        opciones.body = peticion.body;
+    }
+
+    return fetch(destino.toString(), opciones);
+}
+
+export default {
+    async fetch(peticion, env) {
+        const lista = origenes(env);
+        const sitio = env.SITIO || new URL(peticion.url).hostname;
+
+        for (let intento = 0; intento < lista.length; intento++) {
+            const indice = (turno + intento) % lista.length;
+
+            try {
+                const respuesta = await reenviar(peticion, lista[indice], sitio);
+
+                if (respuesta.status < 500) {
+                    turno = (indice + 1) % lista.length;
+                    return respuesta;
+                }
+            } catch (error) {
+                // Se intenta con la siguiente instancia.
+            }
+        }
+
+        return new Response("Servicio temporalmente no disponible.", {
+            status: 503,
+            headers: { "Content-Type": "text/plain; charset=utf-8" }
+        });
+    },
+
+    // Mantiene despiertas las dos instancias.
+    async scheduled(evento, env, ctx) {
+        const lista = origenes(env);
+
+        ctx.waitUntil(
+            Promise.all(
+                lista.map((origen) =>
+                    fetch(origen + "/api/estado").catch(() => null)
+                )
+            )
+        );
+    }
+};
