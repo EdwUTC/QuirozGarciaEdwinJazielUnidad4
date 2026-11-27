@@ -84,6 +84,9 @@ npx wrangler deploy --config deploy/wrangler.toml
 Queda en `https://rayito-balanceador.<subdominio>.workers.dev`, con
 certificado de Cloudflare. No requiere tarjeta.
 
+**Publicado en esta entrega:**
+<https://rayito-balanceador.rayito-de-sol-u4.workers.dev>
+
 ### Opción A: sin dominio propio
 
 Es la vía usada en esta entrega. El `workers.dev` es un nombre DNS real de
