@@ -5,7 +5,10 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "dev": "node --watch app.js"
+    "dev": "node --watch app.js",
+    "build": "node scripts/verificar.js",
+    "db:esquema": "node scripts/crear-esquema.js",
+    "db:demo": "node scripts/crear-demo.js"
   },
   "keywords": [
     "express",
@@ -17,6 +20,8 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@neon/config": "^1.14.8",
+    "@neon/env": "^2.1.11",
     "animate.css": "^4.1.1",
     "axios": "^1.18.1",
     "bcrypt": "^6.0.0",

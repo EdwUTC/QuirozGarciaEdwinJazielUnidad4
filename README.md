@@ -34,6 +34,32 @@ para la materia de *Seguridad y Desarrollo Web*.
 
    y abrir <http://localhost:3000>.
 
+## Comandos
+
+| Comando | Qué hace |
+| --- | --- |
+| `npm start` | Arranca el servidor |
+| `npm run dev` | Arranca con recarga automática |
+| `npm run build` | Valida la sintaxis de todo el JavaScript |
+| `npm run db:esquema` | Carga `schema.sql` en la base de `DATABASE_URL` |
+| `npm run db:demo` | Crea las cuentas de demostración |
+
+## Base de datos en Neon
+
+El proyecto está preparado para usar **Neon** (PostgreSQL gestionado). El CLI
+deja la cadena de conexión en `DATABASE_URL`:
+
+```bash
+neon link --project-id <id> -y
+neon env pull
+npm run db:esquema
+npm run db:demo
+npm start
+```
+
+`database/conexion.js` prefiere `DATABASE_URL` cuando existe y, si no, usa las
+variables `DB_*` del entorno local.
+
 ## Roles
 
 Cada usuario tiene un rol en la columna `usuarios.rol`:
