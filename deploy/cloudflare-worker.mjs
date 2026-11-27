@@ -26,6 +26,13 @@ async function reenviar(peticion, origen, sitio) {
     cabeceras.set("X-Forwarded-Host", sitio);
     cabeceras.set("X-Forwarded-Proto", "https");
 
+    // Sin esto, la aplicación vería la IP del Worker para todos los
+    // visitantes y el límite de peticiones los contaría como uno solo.
+    const ip = peticion.headers.get("CF-Connecting-IP");
+    if (ip) {
+        cabeceras.set("X-Forwarded-For", ip);
+    }
+
     const opciones = {
         method: peticion.method,
         headers: cabeceras,
@@ -34,6 +41,9 @@ async function reenviar(peticion, origen, sitio) {
 
     if (peticion.method !== "GET" && peticion.method !== "HEAD") {
         opciones.body = peticion.body;
+        // Cloudflare no lo necesita; Node sí para reenviar un cuerpo en
+        // streaming desde la prueba local (deploy/probar-worker.mjs).
+        opciones.duplex = "half";
     }
 
     return fetch(destino.toString(), opciones);
