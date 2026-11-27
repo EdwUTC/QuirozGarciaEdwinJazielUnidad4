@@ -19,6 +19,10 @@ envVarGroups:
         sync: false
       - key: RECAPTCHA_SECRET_KEY
         sync: false
+      # Debe ser el MISMO en todas las instancias: con secretos distintos,
+      # la cookie firmada por una no la puede validar la otra.
+      - key: SESSION_SECRET
+        sync: false
 
 services:
   - type: web
@@ -37,8 +41,6 @@ services:
         value: app-1
       - key: TRUST_PROXY
         value: "2"
-      - key: SESSION_SECRET
-        generateValue: true
 
   - type: web
     name: rayito-app-2
@@ -56,5 +58,3 @@ services:
         value: app-2
       - key: TRUST_PROXY
         value: "2"
-      - key: SESSION_SECRET
-        generateValue: true
