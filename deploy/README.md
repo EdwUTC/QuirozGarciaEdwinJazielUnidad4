@@ -77,7 +77,7 @@ atiende al mismo usuario.
 2. Crear cuenta en <https://cloudflare.com> y agregar el dominio.
 3. Copiar los *nameservers* que da Cloudflare en Namecheap.
 4. En Cloudflare, crear el Worker con el contenido de
-   `deploy/cloudflare-worker.js` y definir sus variables:
+   `deploy/cloudflare-worker.mjs` y definir sus variables:
 
    | Variable | Valor |
    |---|---|
@@ -103,6 +103,19 @@ atiende al mismo usuario.
 | Resistencia | borrar una instancia en Render y comprobar que el sitio sigue |
 | Sesión compartida | iniciar sesión y navegar: no se pierde entre instancias |
 | Base de datos | registro, login y citas funcionando |
+
+### Prueba del balanceador antes de publicarlo
+
+El Worker se puede probar sin desplegarlo: se ejecuta en Node y atiende
+peticiones reales contra las dos instancias.
+
+```bash
+node deploy/probar-worker.mjs
+```
+
+Comprueba el reparto alterno, el inicio de sesión a través del dominio, la
+tolerancia a fallos (una instancia caída y ambas caídas) y la tarea de
+mantenimiento. Resultado esperado: `13 correctas, 0 fallas`.
 
 ---
 
